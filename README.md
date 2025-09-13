@@ -1,6 +1,7 @@
-<img width="50" height="52" alt="image-removebg-preview300" src="https://github.com/user-attachments/assets/4ee6ad04-cdba-4b3f-b3f5-502edd40c63d" />
-
-# Agrosense
+<h1>
+  <img src="Frontend/Agrosense/logo.png" alt="AgroSense Logo" width="50" height="50" style="vertical-align:middle;">
+  AgroSense
+</h1>
 
 Agrosense is a comprehensive agricultural application aimed at improving crop yield, soil health, pest control, and irrigation management through machine learning, deep learning, and predictive analytics. The project integrates AI-powered features to provide real-time advisory and actionable insights to farmers.
 
