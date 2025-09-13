@@ -4,6 +4,10 @@
 </h1>
 
 <p align="center">
+  <img src="project/Frontend/Agrosense/thumbnail.png" width="400" alt="AgroSense Thumbnail">
+</p>
+
+<p align="center">
   <em>AI-powered Smart Farming Application for Crop Yield, Soil Health, Pest Control, and Irrigation Management</em>
 </p>
 
