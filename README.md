@@ -3,6 +3,8 @@
   AgroSense
 </h1>
 
+<p>An AI-powered smart farming platform providing crop yield prediction, soil health insights, smart irrigation, and pest management.</p>
+
 
 Agrosense is a comprehensive agricultural application aimed at improving crop yield, soil health, pest control, and irrigation management through machine learning, deep learning, and predictive analytics. The project integrates AI-powered features to provide real-time advisory and actionable insights to farmers.
 
