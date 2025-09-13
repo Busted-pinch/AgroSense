@@ -24,7 +24,7 @@ Agrosense is a comprehensive agricultural application aimed at improving crop yi
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/Agrosense.git
+   git clone https://github.com/Busted-pinch/AgroSense.git
    cd Agrosense
 Create and activate a virtual environment:
 
