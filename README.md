@@ -55,32 +55,32 @@ AgroSense is a comprehensive agricultural application aimed at improving crop yi
    ```bash
    git clone https://github.com/Busted-pinch/AgroSense.git
    cd AgroSense
-Create and activate a virtual environment:
+2.**Create and activate a virtual environment:**
 
-bash
-Copy code
-python -m venv venv
-venv\Scripts\activate      # Windows
-source venv/bin/activate   # macOS/Linux
-Install dependencies:
+   ```bash
+  python -m venv venv
+  venv\Scripts\activate      # Windows
+  source venv/bin/activate   # macOS/Linu
+   ```
+3.**Install dependencies:**
 
-bash
-Copy code
+ ```bash
 pip install -r requirements.txt
-Configure environment files:
+ ```
+4.**Configure environment files:**
+- Ensure .env files are placed in the correct directories.
 
-Ensure .env files are placed in the correct directories.
+5.**Run the application:**
 
-Run the application:
+ ```bash
+  python app/main.py
+ ```
 
-bash
-Copy code
-python app/main.py
 🤝 Contributing
 Contributions are welcome!
 Please fork the repository and submit a pull request with your improvements.
 
 📌 Notes
-Large model files like .pkl are managed via Git LFS.
+- Large model files like .pkl are managed via Git LFS.
 
-For any additional data files or models (e.g., Yield_model.pkl), download separately as mentioned in the repository instructions.
+- For any additional data files or models (e.g., Yield_model.pkl), download separately as mentioned in the repository instructions.
