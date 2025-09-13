@@ -1,5 +1,5 @@
 <h1>
-  <img src="Frontend/Agrosense/logo.png" width="50" height="50" style="vertical-align:middle;">
+  <img src="project/Frontend/Agrosense/logo.png" width="50" height="50" style="vertical-align:middle;">
   AgroSense
 </h1>
 
