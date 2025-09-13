@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <em>AI-powered Smart Farming Application for Crop Yield, Soil Health, Pest Control, and Irrigation Management</em>
+  <em>AI-powered Smart Farming Platform for Crop Yield, Soil Health, Pest Control, and Irrigation Management</em>
 </p>
 
 <p align="center">
