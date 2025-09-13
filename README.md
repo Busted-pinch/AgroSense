@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  <img src="project/Frontend/Agrosense/Image.png" width="400" alt="AgroSense Thumbnail">
+  <img src="project/Frontend/Agrosense/Image.png" width="800" alt="AgroSense Thumbnail">
 </p>
 
 <p align="center">
