@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGROSENSE - AI Crop Yield Prediction</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f9a2c 0%, #68b346 50%, #7bc95a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #4f9a2c;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #4f9a2c;
+            background: white;
+            color: #4f9a2c;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .lang-btn.active, .lang-btn:hover {
+            background: #4f9a2c;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .language-dropdown, .signup {
+            padding: 8px 16px;
+            border: 2px solid #4f9a2c;
+            background: white;
+            color: #4f9a2c;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            }
+
+            .language-dropdown:hover,
+            .language-dropdown:focus, .signup:hover, .signup:focus {
+            background: #4f9a2c;
+            color: white;
+            transform: translateY(-2px);
+            outline: none;
+            }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 80px 0;
+            margin-top: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(79, 154, 44, 0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card:active {
+            transform: translateY(-12px) scale(0.98);
+        }
+
+        .feature-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.2rem;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotateY(360deg) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:nth-child(1) .feature-icon { 
+            background: linear-gradient(45deg, #4f9a2c, #68b346); 
+        }
+        .feature-card:nth-child(2) .feature-icon { 
+            background: linear-gradient(45deg, #e74c3c, #ec7063); 
+        }
+        .feature-card:nth-child(3) .feature-icon { 
+            background: linear-gradient(45deg, #f39c12, #f7dc6f); 
+        }
+        .feature-card:nth-child(4) .feature-icon { 
+            background: linear-gradient(45deg, #3498db, #5dade2); 
+        }
+        .feature-card:nth-child(5) .feature-icon { 
+            background: linear-gradient(45deg, #9b59b6, #bb8fce); 
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover h3 {
+            color: #4f9a2c;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover p {
+            color: #34495e;
+        }
+
+        .feature-action {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .feature-card:hover .feature-action {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .feature-action:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a);
+            transform: scale(1.05);
+        }
+
+        /* Quick Start Section */
+        .quick-start {
+            background: linear-gradient(135deg, #2c5f2d 0%, #4f9a2c 100%);
+            padding: 80px 0;
+            color: white;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: #4f9a2c;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p, .footer-section li {
+            margin-bottom: 10px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #4f9a2c;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            align-items: center;
+        }
+
+        .social-links a {
+            position: relative;      
+            display: inline-block;     
+            width: 45px;              
+            height: 45px;
+            border-radius: 50%;
+            background: #4f9a2c;
+            text-decoration: none;
+            overflow: hidden;          
+            transition: all 0.25s ease;
+        }
+
+        /* Force FontAwesome glyph (or embedded SVG) to sit dead-center */
+        .social-links a i,
+        .social-links a svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: block;
+            width: auto;
+            height: auto;
+            line-height: 1;
+            margin: 0 !important;
+            padding: 0 !important;
+            pointer-events: none; 
+        }
+
+        /* set a consistent visible size for the glyphs */
+        .social-links a i {
+            font-size: 18px; 
+            color: #ffffff;
+        }
+
+        /* if some icons are SVG-based, limit their visual size */
+        .social-links a svg {
+            width: 60%;   
+            height: 60%;
+        }
+
+        .social-links a:hover {
+            background: #68b346;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.6;
+        }
+
+        /* Floating Action Buttons */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .fab-secondary {
+            background: linear-gradient(45deg, #3498db, #5dade2);
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Voice Assistant */
+        .voice-assistant {
+            position: fixed;
+            top: 50%;
+            right: -300px;
+            width: 280px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: right 0.3s ease;
+            z-index: 1000;
+        }
+
+        .voice-assistant.active {
+            right: 20px;
+        }
+
+        .voice-btn {
+            background: linear-gradient(45deg, #e74c3c, #ec7063);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Feature Modal */
+        .feature-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .features-grid, .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .language-selector {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* Interactive hover effects */
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feature-card:hover {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4edda 100%);
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced button styles */
+        .feature-action:hover {
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.4);
+        }
+
+        .modal-content button:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a) !important;
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i>
+                    <span id="appName">AGROSENSE</span>
+                </div>
+                <div class="language-selector">
+ <button class="signup" onclick="window.open('signup.html', '_blank')">Sign Up</button>
+  <select class="language-dropdown" onchange="changeLanguage(this.value)">
+    <option value="en" selected>English</option>
+    <option value="hi">हिंदी</option>
+    <option value="mr">मराठी</option>
+  </select>
+</div>
+
+                
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="heroTitle">AI-Powered Crop Yield Prediction</h1>
+            <p id="heroSubtitle">Empowering farmers with intelligent insights for better harvests. Get personalized recommendations for fertilization and pest control tailored to your crops and local conditions.</p>
+            <button class="cta-button" onclick="window.open('yeild.html', '_blank')">
+                <i class="fas fa-chart-line"></i> <span id="ctaText">Start Prediction</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title" id="featuresTitle">Smart Farming Features</h2>
+            <p class="section-subtitle" id="featuresSubtitle">Advanced AI technology to optimize your agricultural practices</p>
+            
+            <div class="features-grid">
+                <div class="feature-card" onclick="openFeatureModal('yield')">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 id="feature1Title">Yield Prediction</h3>
+                    <p id="feature1Desc">Accurate crop yield forecasting using historical data, weather patterns, and soil conditions</p>
+                    <button class="feature-action" id="feature1Action">Learn More</button>
+                </div>
+                
+                <div class="feature-card" onclick="openFeatureModal('pest')">
+                    <div class="feature-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h3 id="feature2Title">Pest Control</h3>
+                    <p id="feature2Desc">Early pest detection and prevention strategies to protect your crops effectively</p>
+                    <button class="feature-action" id="feature2Action">Learn More</button>
+                </div>
+                
+                <div class="feature-card" onclick="openFeatureModal('soil')">
+                    <div class="feature-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 id="feature3Title">Soil Health</h3>
+                    <p id="feature3Desc">Monitor soil health and get fertilization recommendations for optimal crop growth</p>
+                    <button class="feature-action" id="feature3Action">Learn More</button>
+                </div>
+
+                <div class="feature-card" onclick="openFeatureModal('irrigation')">
+                    <div class="feature-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3 id="feature4Title">Smart Irrigation</h3>
+                    <p id="feature4Desc">Automated irrigation scheduling based on soil moisture, weather forecasts, and crop requirements</p>
+                    <button class="feature-action" id="feature4Action">Learn More</button>
+                </div>
+                
+                <div class="feature-card" onclick="openFeatureModal('expert')">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 id="feature5Title">Expert Consultation</h3>
+                    <p id="feature5Desc">Connect with agricultural experts for personalized advice and problem-solving support</p>
+                    <button class="feature-action" id="feature5Action">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Modal -->
+    <div id="featureModal" class="feature-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Quick Start Section -->
+    <section class="quick-start">
+        <div class="container">
+            <h2 class="section-title" id="quickStartTitle">Get Started in 3 Simple Steps</h2>
+            <p class="section-subtitle" id="quickStartSubtitle">Begin your smart farming journey today</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 id="step1Title">Select Location</h3>
+                    <p id="step1Desc">Choose your farm location or enable GPS for automatic detection</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 id="step2Title">Choose Crop</h3>
+                    <p id="step2Desc">Pick your crop type from our extensive database of regional crops</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 id="step3Title">Get Insights</h3>
+                    <p id="step3Desc">Receive personalized recommendations and yield predictions instantly</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voice Assistant Panel -->
+    <div class="voice-assistant" id="voiceAssistant">
+        <h4 style="margin-bottom: 15px; color: #2c3e50;"><i class="fas fa-microphone"></i> <span id="voiceAssistantTitle">Voice Assistant</span></h4>
+        <p style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 15px;" id="voiceHelp">Speak your questions about crops, weather, or farming tips</p>
+        <button class="voice-btn" onclick="startVoiceRecording()">
+            <i class="fas fa-microphone"></i> <span id="voiceBtn">Start Listening</span>
+        </button>
+        <div id="voiceStatus" style="margin-top: 15px; font-size: 0.8rem; color: #3498db;"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 id="footerAboutTitle">About AGROSENSE</h3>
+                    <p id="footerAboutDesc">AGROSENSE is an AI-powered platform dedicated to helping farmers make informed decisions through advanced crop yield prediction, soil health monitoring, and pest control strategies.</p>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 id="footerServicesTitle">Our Services</h3>
+                    <ul>
+                        <li><a href="#" id="footerService1">Crop Yield Prediction</a></li>
+                        <li><a href="#" id="footerService2">Soil Health Analysis</a></li>
+                        <li><a href="#" id="footerService3">Pest Control Guidance</a></li>
+                        <li><a href="#" id="footerService4">Smart Irrigation Systems</a></li>
+                        <li><a href="#" id="footerService5">Expert Consultation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 id="footerSupportTitle">Support</h3>
+                    <ul>
+                        <li><a href="#" id="footerHelp">Help Center</a></li>
+                        <li><a href="#" id="footerContact">Contact Us</a></li>
+                        <li><a href="#" id="footerFAQ">FAQ</a></li>
+                        <li><a href="#" id="footerTutorials">Tutorials</a></li>
+                        <li><a href="#" id="footerCommunity">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 id="footerContactTitle">Contact Info</h3>
+                    <p><i class="fas fa-phone"></i> +91 1800-123-4567</p>
+                    <p><i class="fas fa-envelope"></i> support@agrosense.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> <span id="footerAddress">Agriculture Technology Center, Mumbai, India</span></p>
+                    <p><i class="fas fa-clock"></i> <span id="footerHours">24/7 Support Available</span></p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 AGROSENSE. <span id="footerRights">All rights reserved.</span> | <span id="footerMade">Made with ❤️ for Indian Farmers</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <button class="fab fab-secondary" onclick="toggleVoiceAssistant()" title="Voice Assistant">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+
+    <script>
+        // Language content
+        const content = {
+            en: {
+                appName: "AGROSENSE",
+                heroTitle: "AI-Powered Crop Yield Prediction",
+                heroSubtitle: "Empowering farmers with intelligent insights for better harvests. Get personalized recommendations for fertilization and pest control tailored to your crops and local conditions.",
+                ctaText: "Start Prediction",
+                featuresTitle: "Smart Farming Features",
+                featuresSubtitle: "Advanced AI technology to optimize your agricultural practices",
+                feature1Title: "Yield Prediction",
+                feature1Desc: "Accurate crop yield forecasting using historical data, weather patterns, and soil conditions",
+                feature1Action: "Learn More",
+                feature2Title: "Pest Control",
+                feature2Desc: "Early pest detection and prevention strategies to protect your crops effectively",
+                feature2Action: "Learn More",
+                feature3Title: "Soil Health",
+                feature3Desc: "Monitor soil health and get fertilization recommendations for optimal crop growth",
+                feature3Action: "Learn More",
+                feature4Title: "Smart Irrigation",
+                feature4Desc: "Automated irrigation scheduling based on soil moisture, weather forecasts, and crop requirements",
+                feature4Action: "Learn More",
+                feature5Title: "Expert Consultation",
+                feature5Desc: "Connect with agricultural experts for personalized advice and problem-solving support",
+                feature5Action: "Learn More",
+                quickStartTitle: "Get Started in 3 Simple Steps",
+                quickStartSubtitle: "Begin your smart farming journey today",
+                step1Title: "Select Location",
+                step1Desc: "Choose your farm location or enable GPS for automatic detection",
+                step2Title: "Choose Crop",
+                step2Desc: "Pick your crop type from our extensive database of regional crops",
+                step3Title: "Get Insights",
+                step3Desc: "Receive personalized recommendations and yield predictions instantly",
+                voiceAssistantTitle: "Voice Assistant",
+                voiceHelp: "Speak your questions about crops, weather, or farming tips",
+                voiceBtn: "Start Listening",
+                footerAboutTitle: "About AGROSENSE",
+                footerAboutDesc: "AGROSENSE is an AI-powered platform dedicated to helping farmers make informed decisions through advanced crop yield prediction, soil health monitoring, and pest control strategies.",
+                footerServicesTitle: "Our Services",
+                footerService1: "Crop Yield Prediction",
+                footerService2: "Soil Health Analysis",
+                footerService3: "Pest Control Guidance",
+                footerService4: "Smart Irrigation Systems",
+                footerService5: "Expert Consultation",
+                footerSupportTitle: "Support",
+                footerHelp: "Help Center",
+                footerContact: "Contact Us",
+                footerFAQ: "FAQ",
+                footerTutorials: "Tutorials",
+                footerCommunity: "Community",
+                footerContactTitle: "Contact Info",
+                footerAddress: "Agriculture Technology Center, Mumbai, India",
+                footerHours: "24/7 Support Available",
+                footerRights: "All rights reserved.",
+                footerMade: "Made with ❤️ for Indian Farmers"
+            },
+            hi: {
+                appName: "एग्रोसेंस",
+                heroTitle: "AI-संचालित फसल उत्पादन भविष्यवाणी",
+                heroSubtitle: "बेहतर फसल के लिए किसानों को बुद्धिमान अंतर्दृष्टि प्रदान करना। अपनी फसलों और स्थानीय परिस्थितियों के अनुकूल उर्वरक और कीट नियंत्रण के लिए व्यक्तिगत सुझाव प्राप्त करें।",
+                ctaText: "भविष्यवाणी शुरू करें",
+                featuresTitle: "स्मार्ट कृषि सुविधाएं",
+                featuresSubtitle: "अपनी कृषि प्रथाओं को अनुकूलित करने के लिए उन्नत AI तकनीक",
+                feature1Title: "उत्पादन भविष्यवाणी",
+                feature1Desc: "ऐतिहासिक डेटा, मौसम पैटर्न और मिट्टी की स्थिति का उपयोग करके सटीक फसल उत्पादन पूर्वानुमान",
+                feature1Action: "और जानें",
+                feature2Title: "कीट नियंत्रण",
+                feature2Desc: "अपनी फसलों को प्रभावी रूप से सुरक्षित रखने के लिए शीघ्र कीट का पता लगाना और रोकथाम रणनीतियां",
+                feature2Action: "और जानें",
+                feature3Title: "मिट्टी का स्वास्थ्य",
+                feature3Desc: "मिट्टी के स्वास्थ्य की निगरानी करें और इष्टतम फसल वृद्धि के लिए उर्वरक सुझाव प्राप्त करें",
+                feature3Action: "और जानें",
+                feature4Title: "स्मार्ट सिंचाई",
+                feature4Desc: "मिट्टी की नमी, मौसम पूर्वानुमान और फसल आवश्यकताओं के आधार पर स्वचालित सिंचाई निर्धारण",
+                feature4Action: "और जानें",
+                feature5Title: "विशेषज्ञ सलाह",
+                feature5Desc: "व्यक्तिगत सलाह और समस्या समाधान सहायता के लिए कृषि विशेषज्ञों से जुड़ें",
+                feature5Action: "और जानें",
+                quickStartTitle: "3 आसान प्रक्रियाओं में शुरू करें",
+                quickStartSubtitle: "आज ही अपनी स्मार्ट कृषि यात्रा शुरू करें",
+                step1Title: "स्थान चुनें",
+                step1Desc: "अपने खेत का स्थान चुनें या स्वचालित पहचान के लिए GPS सक्षम करें",
+                step2Title: "फसल चुनें",
+                step2Desc: "क्षेत्रीय फसलों के हमारे विस्तृत डेटाबेस से अपनी फसल का प्रकार चुनें",
+                step3Title: "अंतर्दृष्टि प्राप्त करें",
+                step3Desc: "तुरंत व्यक्तिगत सुझाव और उत्पादन भविष्यवाणी प्राप्त करें",
+                voiceAssistantTitle: "आवाज सहायक",
+                voiceHelp: "फसलों, मौसम या खेती की युक्तियों के बारे में अपने प्रश्न बोलें",
+                voiceBtn: "सुनना शुरू करें",
+                footerAboutTitle: "एग्रोसेंस के बारे में",
+                footerAboutDesc: "एग्रोसेंस एक AI-संचालित प्लेटफॉर्म है जो उन्नत फसल उत्पादन भविष्यवाणी, मिट्टी स्वास्थ्य निगरानी और कीट नियंत्रण रणनीतियों के माध्यम से किसानों को सूचित निर्णय लेने में मदद करने के लिए समर्पित है।",
+                footerServicesTitle: "हमारी सेवाएं",
+                footerService1: "फसल उत्पादन भविष्यवाणी",
+                footerService2: "मिट्टी स्वास्थ्य विश्लेषण",
+                footerService3: "कीट नियंत्रण मार्गदर्शन",
+                footerService4: "स्मार्ट सिंचाई सिस्टम",
+                footerService5: "विशेषज्ञ सलाह",
+                footerSupportTitle: "सहायता",
+                footerHelp: "सहायता केंद्र",
+                footerContact: "हमसे संपर्क करें",
+                footerFAQ: "अक्सर पूछे जाने वाले प्रश्न",
+                footerTutorials: "ट्यूटोरियल",
+                footerCommunity: "समुदाय",
+                footerContactTitle: "संपर्क जानकारी",
+                footerAddress: "कृषि प्रौद्योगिकी केंद्र, मुंबई, भारत",
+                footerHours: "24/7 सहायता उपलब्ध",
+                footerRights: "सभी अधिकार सुरक्षित।",
+                footerMade: "भारतीय किसानों के लिए ❤️ के साथ बनाया गया"
+            },
+            mr: {
+                appName: "एग्रोसेंस",
+                heroTitle: "AI-चालित पीक उत्पादन अंदाज",
+                heroSubtitle: "चांगल्या हंगामासाठी शेतकऱ्यांना बुद्धिमत्तापूर्ण अंतर्दृष्टी प्रदान करणे। तुमच्या पिकांच्या आणि स्थानिक परिस्थितींनुसार खतीकरण आणि कीटकनाशकांसाठी वैयक्तिक शिफारसी मिळवा.",
+                ctaText: "अंदाज सुरू करा",
+                featuresTitle: "स्मार्ट शेती वैशिष्ट्ये",
+                featuresSubtitle: "तुमच्या शेती पद्धती सुधारण्यासाठी प्रगत AI तंत्रज्ञान",
+                feature1Title: "उत्पादन अंदाज",
+                feature1Desc: "ऐतिहासिक डेटा, हवामान पॅटर्न आणि मातीच्या परिस्थितीचा वापर करून अचूक पीक उत्पादन अंदाज",
+                feature1Action: "अधिक जाणा",
+                feature2Title: "कीटक नियंत्रण",
+                feature2Desc: "तुमच्या पिकांचे प्रभावीपणे संरक्षण करण्यासाठी लवकर कीटक शोध आणि प्रतिबंधक धोरणे",
+                feature2Action: "अधिक जाणा",
+                feature3Title: "मातीचे आरोग्य",
+                feature3Desc: "मातीच्या आरोग्याचे निरीक्षण करा आणि इष्टतम पीक वाढीसाठी खत शिफारसी मिळवा",
+                feature3Action: "अधिक जाणा",
+                feature4Title: "स्मार्ट सिंचन",
+                feature4Desc: "मातीतील ओलावा, हवामान अंदाज आणि पिकांच्या गरजांवर आधारित स्वयंचलित सिंचन नियोजन",
+                feature4Action: "अधिक जाणा",
+                feature5Title: "तज्ञ सल्ला",
+                feature5Desc: "वैयक्तिक सल्ला आणि समस्या निराकरण सहाय्यासाठी कृषी तज्ञांशी जुडा",
+                feature5Action: "अधिक जाणा",
+                quickStartTitle: "3 सोप्या पायऱ्यांत सुरुवात करा",
+                quickStartSubtitle: "आजच तुमचा स्मार्ट शेती प्रवास सुरू करा",
+                step1Title: "स्थान निवडा",
+                step1Desc: "तुमच्या शेताचे स्थान निवडा किंवा स्वयंचलित शोधासाठी GPS सक्षम करा",
+                step2Title: "पीक निवडा",
+                step2Desc: "प्रादेशिक पिकांच्या आमच्या विस्तृत डेटाबेसमधून तुमचा पिकाचा प्रकार निवडा",
+                step3Title: "अंतर्दृष्टी मिळवा",
+                step3Desc: "तात्काळ वैयक्तिक शिफारसी आणि उत्पादन अंदाज प्राप्त करा",
+                voiceAssistantTitle: "आवाज सहाय्यक",
+                voiceHelp: "पिके, हवामान किंवा शेतीच्या टिप्सबद्दल तुमचे प्रश्न बोला",
+                voiceBtn: "ऐकणे सुरू करा",
+                footerAboutTitle: "एग्रोसेंस बद्दल",
+                footerAboutDesc: "एग्रोसेंस हे एक AI-चालित प्लॅटफॉर्म आहे जे प्रगत पीक उत्पादन अंदाज, मातीचे आरोग्य निरीक्षण आणि कीटक नियंत्रण धोरणांच्या माध्यमातून शेतकऱ्यांना माहितीपूर्ण निर्णय घेण्यास मदत करण्यासाठी समर्पित आहे.",
+                footerServicesTitle: "आमच्या सेवा",
+                footerService1: "पीक उत्पादन अंदाज",
+                footerService2: "मातीचे आरोग्य विश्लेषण",
+                footerService3: "कीटक नियंत्रण मार्गदर्शन",
+                footerService4: "स्मार्ट सिंचन प्रणाली",
+                footerService5: "तज्ञ सल्ला",
+                footerSupportTitle: "समर्थन",
+                footerHelp: "सहाय्य केंद्र",
+                footerContact: "आमच्याशी संपर्क साधा",
+                footerFAQ: "वारंवार विचारले जाणारे प्रश्न",
+                footerTutorials: "ट्यूटोरियल",
+                footerCommunity: "समुदाय",
+                footerContactTitle: "संपर्क माहिती",
+                footerAddress: "कृषी तंत्रज्ञान केंद्र, मुंबई, भारत",
+                footerHours: "24/7 समर्थन उपलब्ध",
+                footerRights: "सर्व हक्क राखीव.",
+                footerMade: "भारतीय शेतकऱ्यांसाठी ❤️ सह बनवले"
+            }
+        };
+
+        // Feature modal content
+        const modalContent = {
+            en: {
+                yield: {
+                    title: "Advanced Yield Prediction",
+                    content: `
+                        <h3>How It Works</h3>
+                        <p>Our AI algorithm analyzes multiple data points:</p>
+                        <ul>
+                            <li>Historical yield data from your region</li>
+                            <li>Real-time weather conditions and forecasts</li>
+                            <li>Soil composition and health metrics</li>
+                            <li>Crop variety and planting dates</li>
+                            <li>Local pest and disease reports</li>
+                        </ul>
+                        <h3>Benefits</h3>
+                        <ul>
+                            <li>95% accuracy rate in predictions</li>
+                            <li>Plan harvesting and marketing strategies</li>
+                            <li>Optimize resource allocation</li>
+                            <li>Reduce financial risks</li>
+                        </ul>
+                        <button style="background: linear-gradient(45deg, #4f9a2c, #68b346); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: all 0.3s ease;" onclick="window.open('yeild.html', '_blank')">Try Prediction</button>
+                    `
+                },
+                pest: {
+                    title: "Smart Pest Control",
+                    content: `
+                        <h3>Early Detection System</h3>
+                        <p>Our pest control system uses:</p>
+                        <ul>
+                            <li>Image recognition for pest identification</li>
+                            <li>Weather-based pest activity predictions</li>
+                            <li>Crop-specific pest calendars</li>
+                            <li>Integrated pest management strategies</li>
+                        </ul>
+                        <h3>Prevention Methods</h3>
+                        <ul>
+                            <li>Organic and chemical treatment options</li>
+                            <li>Biological control recommendations</li>
+                            <li>Timing optimization for treatments</li>
+                            <li>Cost-effective solutions</li>
+                        </ul>
+                        <button style="background: linear-gradient(45deg, #4f9a2c, #68b346); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: all 0.3s ease;" onclick="window.open('pestcontrol.html', '_blank')">Analyze Pests</button>
+                    `
+                },
+                soil: {
+                    title: "Soil Health Monitoring",
+                    content: `
+                        <h3>Comprehensive Analysis</h3>
+                        <p>Monitor key soil parameters:</p>
+                        <ul>
+                            <li>pH levels and nutrient content</li>
+                            <li>Organic matter percentage</li>
+                            <li>Water retention capacity</li>
+                            <li>Microbial activity levels</li>
+                            <li>Heavy metal contamination</li>
+                        </ul>
+                        <h3>Smart Recommendations</h3>
+                        <ul>
+                            <li>Customized fertilizer plans</li>
+                            <li>Organic amendment suggestions</li>
+                            <li>Soil improvement strategies</li>
+                            <li>Cost optimization</li>
+                        </ul>
+                        <button style="background: linear-gradient(45deg, #4f9a2c, #68b346); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: all 0.3s ease;" onclick="window.open('soilhealth.html', '_blank')">Test Soil</button>
+                    `
+                },
+                irrigation: {
+                    title: "Smart Irrigation System",
+                    content: `
+                        <h3>Intelligent Water Management</h3>
+                        <p>Optimize water usage with:</p>
+                        <ul>
+                            <li>Soil moisture sensor integration</li>
+                            <li>Weather forecast analysis</li>
+                            <li>Crop water requirement calculations</li>
+                            <li>Automated scheduling systems</li>
+                            <li>Water conservation strategies</li>
+                        </ul>
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li>30% water savings on average</li>
+                            <li>Remote monitoring and control</li>
+                            <li>Alert system for anomalies</li>
+                            <li>Integration with existing systems</li>
+                        </ul>
+                        <button style="background: linear-gradient(45deg, #4f9a2c, #68b346); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: all 0.3s ease;" onclick="window.open('smartirrigation.html', '_blank')">Setup Irrigation</button>
+                    `
+                },
+                expert: {
+                    title: "Expert Consultation",
+                    content: `
+                        <h3>Connect with Experts</h3>
+                        <p>Access professional guidance:</p>
+                        <ul>
+                            <li>Certified agricultural consultants</li>
+                            <li>Regional farming specialists</li>
+                            <li>Crop-specific experts</li>
+                            <li>Technology integration support</li>
+                            <li>Market analysis experts</li>
+                        </ul>
+                        <h3>Consultation Options</h3>
+                        <ul>
+                            <li>Video consultations</li>
+                            <li>On-site farm visits</li>
+                            <li>24/7 chat support</li>
+                            <li>Emergency assistance</li>
+                        </ul>
+                        <button style="background: linear-gradient(45deg, #4f9a2c, #68b346); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: all 0.3s ease;" onclick="window.open('expertconsultation.html', '_blank')">Book Consultation</button>
+                    `
+                }
+            }
+        };
+
+        let currentLanguage = 'en';
+        let isVoiceRecording = false;
+
+        // Language change function
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content
+            const langContent = content[lang];
+            for (const key in langContent) {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = langContent[key];
+                }
+            }
+        }
+
+        // Feature modal functions
+        function openFeatureModal(feature) {
+            const modal = document.getElementById('featureModal');
+            const modalContentDiv = document.getElementById('modalContent');
+            const featureData = modalContent[currentLanguage][feature];
+            
+            modalContentDiv.innerHTML = `
+                <h2>${featureData.title}</h2>
+                ${featureData.content}
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Close modal when clicking the X
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('featureModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('featureModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Voice Assistant functions
+        function toggleVoiceAssistant() {
+            const assistant = document.getElementById('voiceAssistant');
+            assistant.classList.toggle('active');
+        }
+
+        function startVoiceRecording() {
+            const button = document.querySelector('.voice-btn');
+            const status = document.getElementById('voiceStatus');
+            
+            if (!isVoiceRecording) {
+                isVoiceRecording = true;
+                button.innerHTML = '<i class="fas fa-stop"></i> Stop Listening';
+                button.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)';
+                status.textContent = 'Listening... Speak now';
+                
+                // Simulate voice recognition
+                setTimeout(() => {
+                    status.textContent = 'Processing your question...';
+                    setTimeout(() => {
+                        status.textContent = 'Response: Based on current weather, consider increasing irrigation frequency.';
+                        isVoiceRecording = false;
+                        button.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
+                        button.style.background = 'linear-gradient(45deg, #e74c3c, #ec7063)';
+                    }, 2000);
+                }, 3000);
+            } else {
+                isVoiceRecording = false;
+                button.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
+                button.style.background = 'linear-gradient(45deg, #e74c3c, #ec7063)';
+                status.textContent = '';
+            }
+        }
+
+        // Action functions
+        function startPrediction() {
+            window.location.href = "yield.html";
+        }
+
+        function startPestAnalysis() {
+            alert('Opening pest analysis module...');
+        }
+
+        function startSoilAnalysis() {
+            alert('Launching soil health checker...');
+        }
+
+        function setupIrrigation() {
+            alert('Opening irrigation setup wizard...');
+        }
+
+        function bookConsultation() {
+            alert('Connecting to expert consultation booking...');
+        }
+
+        // Add ripple effect to buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('feature-card') || 
+                e.target.classList.contains('cta-button') ||
+                e.target.classList.contains('feature-action')) {
+                
+                const ripple = document.createElement('span');
+                const rect = e.target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.feature-card, .step-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Performance optimization - lazy loading for images
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.src = img.dataset.src;
+            });
+        } else {
+            // Fallback for browsers that don't support lazy loading
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>

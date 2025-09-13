@@ -1,0 +1,15 @@
+fastapi==0.78.0
+uvicorn==0.18.2
+torch
+openai-whisper
+ffmpeg-python
+python-multipart
+fastapi
+uvicorn
+python-multipart
+pydantic
+sqlite-utils
+passlib[bcrypt]
+python-jose
+sqlalchemy
+python-dotenv

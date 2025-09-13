@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGROSENSE - Expert Consultation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f9a2c 0%, #68b346 50%, #7bc95a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #4f9a2c;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2c5f2d;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            background: #4f9a2c;
+            color: white;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.3);
+        }
+
+        /* Chat Container */
+        .chat-section {
+            background: white;
+            margin: 30px 0;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: calc(100vh - 180px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #2c5f2d 0%, #4f9a2c 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .chat-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .expert-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: inline-flex;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(45deg, #3498db, #5dade2);
+        }
+
+        .message-content {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 70%;
+            position: relative;
+        }
+
+        .message.bot .message-content {
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+
+        .chat-input-container {
+            background: white;
+            padding: 25px 30px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 15px 25px;
+            font-size: 1rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #4f9a2c;
+            box-shadow: 0 0 0 3px rgba(79, 154, 44, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 0;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #4f9a2c;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+
+        .welcome-message i {
+            font-size: 4rem;
+            color: #4f9a2c;
+            margin-bottom: 20px;
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #4f9a2c;
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #2c5f2d;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .chat-messages {
+                padding: 20px 15px;
+            }
+            
+            .chat-input-container {
+                padding: 20px 15px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .chat-suggestions {
+                padding: 15px;
+            }
+        }
+
+        .chat-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            margin-top: auto;
+        }
+
+        .suggestion-btn {
+            background: white;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .suggestion-btn:hover {
+            background: #4f9a2c;
+            color: white;
+            border-color: #4f9a2c;
+        }
+        .no-style {
+    text-decoration: none;  /* removes underline */
+    color: inherit;         /* makes link use normal text color */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <a href="home.html" class="no-style">
+                    <i class="fas fa-seedling"></i>
+                    <span>AGROSENSE</span> </a>
+                </div>
+                <div class="nav-links">
+                    <a href="home.html" class="back-btn" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Chat Section -->
+    <section class="container">
+        <div class="chat-section">
+            <div class="chat-header">
+                <h2><i class="fas fa-user-tie"></i> Agricultural Expert Assistant</h2>
+                <p>Get instant answers to all your farming questions from our AI-powered agricultural expert</p>
+                <div class="expert-status">
+                    <div class="status-dot"></div>
+                    <span>Expert Online - Ready to Help</span>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Welcome to Agricultural Expert Consultation</h3>
+                        <p>Ask me anything about farming, crops, soil health, pest control, irrigation, or any agricultural topic. I'm here to help you grow better crops!</p>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="message-avatar" style="background: linear-gradient(45deg, #4f9a2c, #68b346);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                    <span style="margin-left: 10px; color: #666;">Expert is typing...</span>
+                </div>
+            </div>
+
+            <div class="chat-suggestions">
+                <div class="suggestion-btn" onclick="sendQuickQuestion('What crops are best for monsoon season?')">What crops are best for monsoon?</div>
+                <div class="suggestion-btn" onclick="sendQuickQuestion('How to identify pest damage?')">Pest damage identification</div>
+                <div class="suggestion-btn" onclick="sendQuickQuestion('Soil testing recommendations')">Soil testing advice</div>
+                <div class="suggestion-btn" onclick="sendQuickQuestion('Organic fertilizer options')">Organic fertilizers</div>
+                <div class="suggestion-btn" onclick="sendQuickQuestion('Irrigation scheduling')">Irrigation scheduling</div>
+                <div class="suggestion-btn" onclick="sendQuickQuestion('Market prices today')">Market prices</div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-group">
+                    <textarea 
+                        class="chat-input" 
+                        id="messageInput" 
+                        placeholder="Type your agriculture question here..."
+                        rows="1"
+                        onkeypress="handleKeyPress(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        // Agricultural knowledge base with Indian farming context
+        const agriculturalKnowledge = {
+            crops: {
+                rice: "Rice cultivation requires well-drained, fertile soil with pH 5.0-7.0. Best sown during monsoon (June-July). Requires consistent water supply and takes 90-120 days to mature.",
+                wheat: "Wheat grows best in cool, dry climate. Sow in October-November in North India. Requires well-drained loamy soil with pH 6.0-7.5. Harvest in March-April.",
+                cotton: "Cotton needs warm weather and moderate rainfall. Plant during April-May. Requires deep, well-drained black soil. Major cotton states: Gujarat, Maharashtra, Telangana.",
+                sugarcane: "Sugarcane grows in tropical and subtropical climates. Plant during February-March or October-November. Requires rich, well-drained soil and adequate water supply.",
+                maize: "Maize can be grown in kharif and rabi seasons. Requires well-drained soil with pH 5.8-8.0. Sow during June-July for kharif and November-December for rabi."
+            },
+            pests: {
+                aphids: "Aphids are small, soft-bodied insects that cluster on young shoots and leaves. Control: Use neem oil spray, introduce ladybugs, or apply insecticidal soap.",
+                bollworm: "Bollworm attacks cotton, tomato, and other crops. Symptoms: holes in leaves and fruits. Control: Use pheromone traps, spray Bt (Bacillus thuringiensis), or neem-based pesticides.",
+                stem_borer: "Common in rice and sugarcane. Symptoms: dead hearts in young plants, white ears in mature plants. Control: Use resistant varieties, apply carbofuran, or release Trichogramma wasps.",
+                whitefly: "Small white flying insects that suck plant sap. Control: Use yellow sticky traps, spray neem oil, or introduce natural predators like spiders."
+            },
+            soil: {
+                testing: "Soil testing should be done every 2-3 years. Test for pH, organic carbon, nitrogen, phosphorus, potassium, and micronutrients. Contact local agricultural extension office for testing facilities.",
+                ph_management: "For acidic soil (pH < 6.5): Add lime or wood ash. For alkaline soil (pH > 7.5): Add sulfur, organic matter, or gypsum. Maintain pH between 6.0-7.5 for most crops.",
+                organic_matter: "Increase soil organic matter by adding compost, farmyard manure, green manure, or crop residues. Target: 2-3% organic carbon in soil.",
+                nutrients: "Major nutrients - NPK (Nitrogen, Phosphorus, Potassium). Micronutrients - Iron, Zinc, Boron, Manganese. Apply based on soil test recommendations."
+            },
+            irrigation: {
+                scheduling: "Water crops based on crop stage, soil moisture, and weather. Check soil moisture at 6-inch depth. Most crops need 1-2 inches per week during growing season.",
+                methods: "Drip irrigation: 30-50% water savings, good for vegetables. Sprinkler: suitable for cereals and fodder crops. Flood irrigation: traditional method for rice.",
+                water_management: "Mulching conserves soil moisture. Plant cover crops to improve water retention. Use moisture meters for precise irrigation scheduling."
+            },
+            fertilizers: {
+                organic: "Organic fertilizers: Compost (NPK: 1-1-1), Vermicompost (NPK: 1-1-1), Neem cake (NPK: 4-1-2), Bone meal (high phosphorus). Apply 2-4 weeks before planting.",
+                chemical: "Chemical fertilizers: Urea (46% N), DAP (18-46-0), MOP (60% K2O). Apply based on soil test and crop requirements. Split application is more effective.",
+                timing: "Basal application: Before sowing/planting. Top dressing: 3-4 weeks after sowing for nitrogen. Foliar spray: for quick nutrient correction."
+            }
+        };
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            messageInput.value = '';
+            autoResize(messageInput);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Generate response after delay
+            setTimeout(() => {
+                const response = generateResponse(message);
+                hideTypingIndicator();
+                addMessage(response, 'bot');
+            }, 1500 + Math.random() * 1000);
+        }
+
+        function sendQuickQuestion(question) {
+            messageInput.value = question;
+            sendMessage();
+        }
+
+        function addMessage(content, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const avatar = type === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    <div class="message-text">${content}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+
+            // Remove welcome message if it exists
+            const welcomeMsg = chatMessages.querySelector('.welcome-message');
+            if (welcomeMsg && type === 'user') {
+                welcomeMsg.remove();
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Crop-specific responses
+            if (lowerMessage.includes('rice') || lowerMessage.includes('धान')) {
+                return agriculturalKnowledge.crops.rice + " Would you like specific advice for your region or growing conditions?";
+            }
+            if (lowerMessage.includes('wheat') || lowerMessage.includes('गेहूं')) {
+                return agriculturalKnowledge.crops.wheat + " Do you need information about varieties suitable for your area?";
+            }
+            if (lowerMessage.includes('cotton') || lowerMessage.includes('कपास')) {
+                return agriculturalKnowledge.crops.cotton + " Are you facing any specific issues with cotton cultivation?";
+            }
+            if (lowerMessage.includes('sugarcane') || lowerMessage.includes('गन्ना')) {
+                return agriculturalKnowledge.crops.sugarcane + " Do you need guidance on sugarcane harvesting or processing?";
+            }
+            if (lowerMessage.includes('maize') || lowerMessage.includes('corn') || lowerMessage.includes('मक्का')) {
+                return agriculturalKnowledge.crops.maize + " Which season are you planning to grow maize?";
+            }
+
+            // Pest-related responses
+            if (lowerMessage.includes('pest') || lowerMessage.includes('insect') || lowerMessage.includes('कीट')) {
+                return "Common pests in Indian agriculture include aphids, bollworm, stem borer, and whitefly. Can you describe the symptoms you're seeing? Are there holes in leaves, discoloration, or visible insects? This will help me provide specific treatment recommendations.";
+            }
+            if (lowerMessage.includes('aphid') || lowerMessage.includes('माहू')) {
+                return agriculturalKnowledge.pests.aphids + " Have you noticed any ants around the affected plants? Ants often farm aphids.";
+            }
+            if (lowerMessage.includes('bollworm') || lowerMessage.includes('बॉलवर्म')) {
+                return agriculturalKnowledge.pests.bollworm + " Which crop are you growing? Treatment may vary based on the crop type.";
+            }
+
+            // Soil-related responses
+            if (lowerMessage.includes('soil') || lowerMessage.includes('मिट्टी')) {
+                if (lowerMessage.includes('test') || lowerMessage.includes('testing')) {
+                    return agriculturalKnowledge.soil.testing + " I can help you interpret your soil test results if you have them.";
+                }
+                if (lowerMessage.includes('ph') || lowerMessage.includes('acidic') || lowerMessage.includes('alkaline')) {
+                    return agriculturalKnowledge.soil.ph_management + " What's your current soil pH level?";
+                }
+                return "Healthy soil is the foundation of good farming. Key factors include pH (6.0-7.5), organic matter (2-3%), proper drainage, and balanced nutrients. What specific soil issue are you facing?";
+            }
+
+            // Fertilizer-related responses
+            if (lowerMessage.includes('fertilizer') || lowerMessage.includes('खाद')) {
+                if (lowerMessage.includes('organic') || lowerMessage.includes('जैविक')) {
+                    return agriculturalKnowledge.fertilizers.organic + " Organic fertilizers improve soil health long-term. Which crop are you planning to fertilize?";
+                }
+                return agriculturalKnowledge.fertilizers.chemical + " I recommend getting a soil test before applying fertilizers. What crop are you growing?";
+            }
+
+            // Irrigation responses
+            if (lowerMessage.includes('water') || lowerMessage.includes('irrigation') || lowerMessage.includes('सिंचाई')) {
+                return agriculturalKnowledge.irrigation.scheduling + " What irrigation method are you currently using? I can suggest improvements for water efficiency.";
+            }
+
+            // Weather-related responses
+            if (lowerMessage.includes('weather') || lowerMessage.includes('rain') || lowerMessage.includes('monsoon') || lowerMessage.includes('मौसम')) {
+                return "Weather plays a crucial role in farming. During monsoon, focus on water drainage and fungal disease prevention. In dry periods, prioritize water conservation and mulching. What specific weather challenge are you facing?";
+            }
+
+            // Monsoon/season specific
+            if (lowerMessage.includes('monsoon') || lowerMessage.includes('kharif') || lowerMessage.includes('खरीफ')) {
+                return "Kharif crops (monsoon season): Rice, cotton, sugarcane, maize, pulses. Sow during June-July, harvest during September-October. Ensure proper drainage to prevent waterlogging. Which kharif crop interests you?";
+            }
+
+            if (lowerMessage.includes('rabi') || lowerMessage.includes('रबी')) {
+                return "Rabi crops (winter season): Wheat, barley, peas, gram, mustard. Sow during October-December, harvest during March-May. These crops need less water than kharif crops. Which rabi crop are you considering?";
+            }
+
+            // Market/price related
+            if (lowerMessage.includes('price') || lowerMessage.includes('market') || lowerMessage.includes('sell') || lowerMessage.includes('बाजार')) {
+                return "For current market prices, check mandi rates through the eNAM portal or your state's agricultural marketing board website. Consider factors like transportation costs, storage, and timing when planning sales. Which crop's pricing are you interested in?";
+            }
+
+            // General farming advice
+            if (lowerMessage.includes('advice') || lowerMessage.includes('help') || lowerMessage.includes('guidance') || lowerMessage.includes('सलाह')) {
+                return "I'm here to help with all aspects of farming! I can assist with crop selection, pest management, soil health, irrigation, fertilizers, and general farming practices. What specific area would you like guidance on?";
+            }
+
+            // Default responses for various scenarios
+            const defaultResponses = [
+                "That's an interesting farming question! Could you provide more details about your specific situation? For example, which crop, your location, or what problems you're experiencing?",
+                "I'd love to help you with that! To give you the most accurate advice, could you tell me more about your farm's conditions - soil type, crop, region, or specific challenges you're facing?",
+                "As an agricultural expert, I need a bit more context to provide the best guidance. What crop are you growing, and what specific issue or question do you have about it?",
+                "Great question! To give you targeted advice, could you share details about your farming situation - location, crops, current practices, or specific problems you're encountering?"
+            ];
+
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        function goBack() {
+            // In a real application, this would navigate back to the main page
+            if (confirm('Are you sure you want to leave the consultation?')) {
+                window.history.back();
+            }
+        }
+
+        // Initialize chat with a welcome message
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus on input
+            messageInput.focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGROSENSE - Soil Health Check</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f9a2c 0%, #68b346 50%, #7bc95a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5f2d;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #4f9a2c;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 40px 0 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            margin: 20px 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 40px 30px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .simple-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-step {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .form-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4f9a2c;
+            box-shadow: 0 0 0 3px rgba(79, 154, 44, 0.1);
+        }
+
+        /* Location Input */
+        .location-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .location-input {
+            flex: 1;
+        }
+
+        .gps-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 154, 44, 0.2);
+            white-space: nowrap;
+        }
+
+        .gps-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.3);
+        }
+
+        .gps-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .radio-option:hover {
+            background: rgba(79, 154, 44, 0.1);
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4f9a2c;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            color: #4f9a2c;
+            font-weight: bold;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* Enhanced NPK Inputs */
+        .npk-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(-20px);
+            margin-top: 20px;
+            padding: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 50%, #e8f4fd 100%);
+            border-radius: 20px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            transition: all 0.5s ease;
+            box-shadow: 0 15px 40px rgba(79, 154, 44, 0.15);
+        }
+
+        .npk-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 3px;
+            background: linear-gradient(135deg, #4f9a2c, #68b346, #7bc95a);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: subtract;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: subtract;
+            z-index: -1;
+        }
+
+        .npk-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .npk-section h4 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .npk-section h4 i {
+            color: #4f9a2c;
+            font-size: 1.4rem;
+        }
+
+        .npk-section > p {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .npk-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .npk-input-group {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .npk-input-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4f9a2c, #68b346);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .npk-input-group:hover::before {
+            transform: translateX(0);
+        }
+
+        .npk-input-group:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(79, 154, 44, 0.15);
+            border-color: rgba(79, 154, 44, 0.2);
+        }
+
+        .npk-input-group label {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-weight: 700;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .npk-input-group .nutrient-name {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: normal;
+            text-transform: none;
+            letter-spacing: 0;
+            margin-top: 5px;
+        }
+
+        .npk-input-group input {
+            text-align: center;
+            border: 2px solid #e1e8ed;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            padding: 15px 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            width: 100%;
+        }
+
+        .npk-input-group input:focus {
+            border-color: #4f9a2c;
+            box-shadow: 0 0 0 4px rgba(79, 154, 44, 0.15);
+            background: white;
+            transform: scale(1.02);
+        }
+
+        .npk-input-group input:valid {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.05);
+        }
+
+        .nutrient-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #4f9a2c, #68b346);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Error and Success Messages */
+        .error-message {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            border-left: 4px solid #dc3545;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.1);
+        }
+
+        .error-message.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .success-message.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Analyze Button */
+        .analyze-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.3);
+            width: fit-content;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 154, 44, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e1e8ed;
+            border-top: 4px solid #4f9a2c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .loading p {
+            color: #7f8c8d;
+        }
+
+        /* Results Section */
+        .results-section {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: slideInFromBottom 0.6s ease;
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .health-score {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(#e1e8ed 0deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .score-circle::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .score-label {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .score-status {
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        /* Deficient Nutrients */
+        .deficient-nutrients {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .deficient-nutrients h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .nutrient-deficiency {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .nutrient-deficiency h4 {
+            color: #721c24;
+            margin-bottom: 5px;
+        }
+
+        .nutrient-deficiency p {
+            color: #721c24;
+            font-size: 0.9rem;
+        }
+
+        .no-deficiency {
+            text-align: center;
+            color: #155724;
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        /* Fertilizer Recommendation */
+        .fertilizer-recommendation {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .fertilizer-recommendation h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .fertilizer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .fertilizer-item {
+            text-align: center;
+            padding: 20px 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            border-radius: 12px;
+            border: 2px solid rgba(79, 154, 44, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .fertilizer-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(79, 154, 44, 0.3);
+            box-shadow: 0 8px 20px rgba(79, 154, 44, 0.15);
+        }
+
+        .fertilizer-item .nutrient-symbol {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #4f9a2c, #68b346);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .fertilizer-item .fertilizer-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .fertilizer-item .fertilizer-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4f9a2c;
+            margin-bottom: 5px;
+        }
+
+        .fertilizer-item .fertilizer-unit {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .fertilizer-note {
+            color: #7f8c8d;
+            font-style: italic;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Color classes for health score */
+        .score-red { color: #dc3545; }
+        .score-orange { color: #fd7e14; }
+        .score-light-green { color: #28a745; }
+        .score-dark-green { color: #155724; }
+
+        .status-red { color: #dc3545; }
+        .status-orange { color: #fd7e14; }
+        .status-light-green { color: #28a745; }
+        .status-dark-green { color: #155724; }
+
+        /* New Analysis Button */
+        .new-analysis-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto 0;
+            display: block;
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.3);
+        }
+
+        .new-analysis-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 154, 44, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+
+            .location-input-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .npk-inputs {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .nav {
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .back-btn {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .score-circle::before {
+                width: 95px;
+                height: 95px;
+            }
+
+            .score-value {
+                font-size: 2rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .fertilizer-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+        .no-style {
+    text-decoration: none;  /* removes underline */
+    color: inherit;         /* makes link use normal text color */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="home.html" class="logo" class="no-style">
+                    <i class="fas fa-seedling"></i>
+                    <span>AGROSENSE</span>
+                </a>
+                <a href="home.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1><i class="fas fa-microscope"></i> Soil Health Check</h1>
+            <p>Analyze your soil nutrients and get fertilizer recommendations</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Form Section -->
+        <section class="form-section" id="form-section">
+            <h2 class="section-title">Soil Analysis Form</h2>
+            <p class="section-subtitle">Enter your location and soil details for personalized recommendations</p>
+            
+            <form class="simple-form" onsubmit="analyzeSoil(event)">
+                <div class="form-step">
+                    <!-- Location Input -->
+                    <div class="input-group">
+                        <label for="location">Location *</label>
+                        <div class="location-input-group">
+                            <input type="text" id="location" class="location-input" 
+                                   placeholder="Enter city, village, or area name" required>
+                            <button type="button" class="gps-btn" onclick="getGPSLocation()">
+                                <i class="fas fa-crosshairs"></i> GPS
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="error-message" id="error-message"></div>
+                    <div class="success-message" id="success-message"></div>
+
+                    <!-- NPK Values Available -->
+                    <div class="input-group">
+                        <label>N,P,K values available? *</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="npkYes" name="npkAvailable" value="yes" onchange="toggleNPKInputs()">
+                                <label for="npkYes">Yes, I have NPK test results</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="npkNo" name="npkAvailable" value="no" onchange="toggleNPKInputs()">
+                                <label for="npkNo">No, estimate from location</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NPK Input Section -->
+                    <div class="npk-section" id="npk-section">
+                        <h4>
+                            <i class="fas fa-flask"></i>
+                            Enter NPK Values (ppm)
+                        </h4>
+                        <p>Enter the nutrient values from your soil test report in parts per million</p>
+                        
+                        <div class="npk-inputs">
+                            <div class="npk-input-group">
+                                <div class="nutrient-icon">N</div>
+                                <label for="nValue">
+                                    Nitrogen
+                                    <div class="nutrient-name">Essential for leaf growth</div>
+                                </label>
+                                <input type="number" id="nValue" placeholder="ppm" min="0">
+                            </div>
+                            <div class="npk-input-group">
+                                <div class="nutrient-icon">P</div>
+                                <label for="pValue">
+                                    Phosphorus
+                                    <div class="nutrient-name">Root & flower development</div>
+                                </label>
+                                <input type="number" id="pValue" placeholder="ppm" min="0">
+                            </div>
+                            <div class="npk-input-group">
+                                <div class="nutrient-icon">K</div>
+                                <label for="kValue">
+                                    Potassium
+                                    <div class="nutrient-name">Disease resistance</div>
+                                </label>
+                                <input type="number" id="kValue" placeholder="ppm" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="analyze-btn">
+                    <i class="fas fa-search"></i> Analyze Soil Health
+                </button>
+            </form>
+        </section>
+
+        <!-- Loading Section -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <h3>Analyzing Your Soil...</h3>
+            <p>Processing location and soil data to generate health report</p>
+        </div>
+
+        <!-- Results Section -->
+        <section class="results-section" id="results">
+            <h2 class="section-title">Soil Health Analysis Results</h2>
+            
+            <!-- Health Score -->
+            <div class="health-score">
+                <div class="score-circle" id="score-circle">
+                    <span class="score-value" id="score-value">--</span>
+                </div>
+                <div class="score-label">Overall Soil Health Score</div>
+                <div class="score-status" id="score-status">Ready for Analysis</div>
+            </div>
+
+            <!-- Location Info -->
+            <div class="location-info" style="text-align: center; margin-bottom: 30px; color: #7f8c8d;">
+                <p><i class="fas fa-map-marker-alt"></i> <span id="analyzed-location">Location</span></p>
+            </div>
+
+            <!-- Deficient Nutrients -->
+            <div class="deficient-nutrients">
+                <h3><i class="fas fa-exclamation-triangle"></i> Nutrient Analysis</h3>
+                <div id="nutrient-status"></div>
+            </div>
+
+            <!-- Fertilizer Recommendations -->
+            <div class="fertilizer-recommendation">
+                <h3><i class="fas fa-seedling"></i> Fertilizer Recommendations</h3>
+                <div class="fertilizer-grid" id="fertilizer-grid">
+                    <!-- Fertilizer recommendations will be inserted here -->
+                </div>
+                <div class="fertilizer-note">
+                    *Recommendations will be provided based on soil test results and location data. Consult local agricultural extension services for specific guidance.
+                </div>
+            </div>
+
+            <!-- New Analysis Button -->
+            <button class="new-analysis-btn" onclick="startNewAnalysis()">
+                <i class="fas fa-redo"></i> Start New Analysis
+            </button>
+        </section>
+    </div>
+
+    <script>
+        // Global variables for storing analysis data
+        let analysisData = {};
+
+        function toggleNPKInputs() {
+            const npkSection = document.getElementById('npk-section');
+            const npkYes = document.getElementById('npkYes').checked;
+            
+            if (npkYes) {
+                npkSection.classList.add('active');
+            } else {
+                npkSection.classList.remove('active');
+            }
+        }
+
+        function showMessage(message, type) {
+            const errorMsg = document.getElementById('error-message');
+            const successMsg = document.getElementById('success-message');
+            
+            // Hide both messages first
+            errorMsg.classList.remove('active');
+            successMsg.classList.remove('active');
+            
+            if (type === 'error') {
+                errorMsg.textContent = message;
+                errorMsg.classList.add('active');
+            } else if (type === 'success') {
+                successMsg.textContent = message;
+                successMsg.classList.add('active');
+            }
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                errorMsg.classList.remove('active');
+                successMsg.classList.remove('active');
+            }, 5000);
+        }
+
+        function getGPSLocation() {
+            const gpsBtn = document.querySelector('.gps-btn');   // <== important
+            if (navigator.geolocation) {
+                gpsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+                gpsBtn.disabled = true;
+
+                navigator.geolocation.getCurrentPosition(async function (position) {
+                    const lat = position.coords.latitude.toFixed(4);
+                    const lon = position.coords.longitude.toFixed(4);
+
+                    try {
+                        // Step 1: Get state from backend
+                        const stateResp = await fetch("http://127.0.0.1:8000/get-state", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ lat: parseFloat(lat), lon: parseFloat(lon) })
+                        });
+                        const stateData = await stateResp.json();
+
+                        // Step 2: Get soil type from external API
+                        const soilResp = await fetch(`https://api.openepi.io/soil/type?lat=${lat}&lon=${lon}`);
+                        const soilJson = await soilResp.json();
+                        const soilType = soilJson.properties?.most_probable_soil_type || "Unknown";
+
+                        // Save into global analysisData
+                        analysisData.detectedSoilType = soilType;
+
+                        // Update UI
+                        document.getElementById("location").value = stateData.state;
+                        showMessage(`Soil type detected: ${soilType}`, "success");
+
+                        gpsBtn.innerHTML = '<i class="fas fa-check"></i> Located!';
+                        setTimeout(() => {
+                            gpsBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use GPS';
+                            gpsBtn.disabled = false;
+                        }, 2000);
+
+                    } catch (err) {
+                        console.error("Error:", err);
+                        showMessage("Failed to fetch soil type", "error");
+                        gpsBtn.innerHTML = '<i class="fas fa-exclamation"></i> Failed';
+                        setTimeout(() => {
+                            gpsBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use GPS';
+                            gpsBtn.disabled = false;
+                        }, 2000);
+                    }
+                }, function (error) {
+                    console.error("Geolocation Error:", error);
+                    gpsBtn.innerHTML = '<i class="fas fa-exclamation"></i> Failed';
+                    setTimeout(() => {
+                        gpsBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use GPS';
+                        gpsBtn.disabled = false;
+                    }, 2000);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function validateForm() {
+            const location = document.getElementById('location').value.trim();
+            const npkAvailable = document.querySelector('input[name="npkAvailable"]:checked');
+            
+            if (!location) {
+                showMessage('Please enter a location', 'error');
+                return false;
+            }
+            
+            if (!npkAvailable) {
+                showMessage('Please select if NPK values are available', 'error');
+                return false;
+            }
+            
+            if (npkAvailable.value === 'yes') {
+                const nValue = parseFloat(document.getElementById('nValue').value);
+                const pValue = parseFloat(document.getElementById('pValue').value);
+                const kValue = parseFloat(document.getElementById('kValue').value);
+                
+                if (isNaN(nValue) || isNaN(pValue) || isNaN(kValue)) {
+                    showMessage('Please enter valid NPK values', 'error');
+                    return false;
+                }
+                
+                if (nValue < 0 || pValue < 0 || kValue < 0) {
+                    showMessage('NPK values cannot be negative', 'error');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function collectFormData() {
+            const location = document.getElementById('location').value.trim();
+            const npkAvailable = document.querySelector('input[name="npkAvailable"]:checked').value;
+            
+            const formData = {
+                location: location,
+                hasNPKValues: npkAvailable === 'yes'
+            };
+            
+            if (formData.hasNPKValues) {
+                formData.npkValues = {
+                    nitrogen: parseFloat(document.getElementById('nValue').value),
+                    phosphorus: parseFloat(document.getElementById('pValue').value),
+                    potassium: parseFloat(document.getElementById('kValue').value)
+                };
+            }
+            
+            return formData;
+        }
+
+        async function processAnalysis(formData) {
+            try {
+                const response = await fetch("http://localhost:8000/soil-health", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        soil_type: analysisData.detectedSoilType || "Alluvial",  // <-- use detected soil type
+                        location: formData.location,
+                        has_npk: formData.hasNPKValues,
+                        N_ppm: formData.hasNPKValues ? formData.npkValues.nitrogen : null,
+                        P_ppm: formData.hasNPKValues ? formData.npkValues.phosphorus : null,
+                        K_ppm: formData.hasNPKValues ? formData.npkValues.potassium : null
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(await response.text());
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error("API Error:", error);
+                throw error;
+            }
+        }
+
+       function displayResults(analysisResult, formData) {
+            document.getElementById('analyzed-location').textContent =
+                `${analysisResult.location} (Soil: ${analysisResult.soil_type})`;
+
+            // Soil Health Index
+            document.getElementById('score-value').textContent = analysisResult.SHI;
+            let scoreStatus = "Poor";
+            if (analysisResult.SHI > 75) scoreStatus = "Excellent";
+            else if (analysisResult.SHI > 50) scoreStatus = "Good";
+            else if (analysisResult.SHI > 30) scoreStatus = "Moderate";
+            document.getElementById('score-status').textContent = scoreStatus;
+
+            // Nutrient analysis
+            const nutrientStatus = document.getElementById('nutrient-status');
+            nutrientStatus.innerHTML = `
+                <div class="nutrient-deficiency">
+                    <h4>Nitrogen: ${analysisResult.N_ppm} ppm</h4>
+                    <p>Needed Fertilizer: ${analysisResult.Needed_N_Fertilizer} kg/ha</p>
+                </div>
+                <div class="nutrient-deficiency">
+                    <h4>Phosphorus: ${analysisResult.P_ppm} ppm</h4>
+                    <p>Needed Fertilizer: ${analysisResult.Needed_P_Fertilizer} kg/ha</p>
+                </div>
+                <div class="nutrient-deficiency">
+                    <h4>Potassium: ${analysisResult.K_ppm} ppm</h4>
+                    <p>Needed Fertilizer: ${analysisResult.Needed_K_Fertilizer} kg/ha</p>
+                </div>
+            `;
+
+            // Fertilizer recommendations
+            const fertilizerGrid = document.getElementById('fertilizer-grid');
+            fertilizerGrid.innerHTML = `
+                <div class="fertilizer-item">
+                    <div class="nutrient-symbol">N</div>
+                    <div class="fertilizer-name">Urea</div>
+                    <div class="fertilizer-amount">${analysisResult.Needed_N_Fertilizer}</div>
+                    <div class="fertilizer-unit">kg/ha</div>
+                </div>
+                <div class="fertilizer-item">
+                    <div class="nutrient-symbol">P</div>
+                    <div class="fertilizer-name">DAP</div>
+                    <div class="fertilizer-amount">${analysisResult.Needed_P_Fertilizer}</div>
+                    <div class="fertilizer-unit">kg/ha</div>
+                </div>
+                <div class="fertilizer-item">
+                    <div class="nutrient-symbol">K</div>
+                    <div class="fertilizer-name">MOP</div>
+                    <div class="fertilizer-amount">${analysisResult.Needed_K_Fertilizer}</div>
+                    <div class="fertilizer-unit">kg/ha</div>
+                </div>
+            `;
+        }
+
+        async function analyzeSoil(event) {
+            event.preventDefault();
+            
+            // Validate form
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Collect form data
+            const formData = collectFormData();
+            
+            // Show loading
+            document.getElementById('form-section').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+            
+            try {
+                // Process analysis (would connect to real APIs)
+                const analysisResult = await processAnalysis(formData);
+                
+                // Store results
+                analysisData = { formData, analysisResult };
+                
+                // Hide loading and show results
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('results').classList.add('active');
+                
+                // Display results
+                displayResults(analysisResult, formData);
+                
+                // Scroll to results
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                // Handle errors
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('form-section').style.display = 'block';
+                showMessage('Analysis failed. Please try again.', 'error');
+                console.error('Analysis error:', error);
+            }
+        }
+
+        function startNewAnalysis() {
+            // Reset form
+            document.getElementById('location').value = '';
+            const npkRadios = document.querySelectorAll('input[name="npkAvailable"]');
+            npkRadios.forEach(radio => radio.checked = false);
+            document.getElementById('nValue').value = '';
+            document.getElementById('pValue').value = '';
+            document.getElementById('kValue').value = '';
+            
+            // Hide NPK section
+            document.getElementById('npk-section').classList.remove('active');
+            
+            // Hide messages
+            document.getElementById('error-message').classList.remove('active');
+            document.getElementById('success-message').classList.remove('active');
+            
+            // Show form and hide results
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('form-section').style.display = 'block';
+            
+            // Scroll to top
+            document.querySelector('.hero').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('AGROSENSE Soil Health Analyzer loaded - Ready for API integration');
+        });
+    </script>
+</body>
+</html>

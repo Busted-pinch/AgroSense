@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGROSENSE - AI Crop Yield Prediction Tool</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f9a2c 0%, #68b346 50%, #7bc95a 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #4f9a2c;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .page-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        .prediction-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        /* Input Form */
+        .input-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e8f4fd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4f9a2c;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 154, 44, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e8f4fd;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #f8f9ff;
+            cursor: pointer;
+        }
+
+        .location-group {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .location-input {
+            flex: 1;
+        }
+
+        .gps-btn {
+            background: linear-gradient(45deg, #3498db, #5dade2);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .gps-btn:hover {
+            background: linear-gradient(45deg, #5dade2, #85c1e9);
+            transform: translateY(-1px);
+        }
+
+        .predict-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .predict-btn:hover {
+            background: linear-gradient(45deg, #ffa500, #ff8c00);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .predict-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            opacity: 0.5;
+            transition: all 0.5s ease;
+        }
+
+        .results-section.active {
+            opacity: 1;
+        }
+
+        .results-content {
+            display: none;
+        }
+
+        .results-content.show {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e8f4fd;
+            border-top: 5px solid #4f9a2c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4f9a2c;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4f9a2c;
+            margin-bottom: 10px;
+        }
+
+        .result-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .fertilizer-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4f9a2c;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .insight-item {
+            background: rgba(79, 154, 44, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .insight-icon {
+            font-size: 2.5rem;
+            color: #4f9a2c;
+            margin-bottom: 15px;
+        }
+
+        .insight-label {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .insight-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .prediction-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .location-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .gps-btn {
+                width: 100%;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .input-section, .results-section {
+                padding: 25px;
+            }
+        }
+           .no-style {
+    text-decoration: none;  /* removes underline */
+    color: inherit;         /* makes link use normal text color */
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <a href="home.html" class="no-style">
+                    <i class="fas fa-seedling"></i>
+                    <span>AGROSENSE</span></a>
+                </div>
+                <a href="home.html" class="back-btn" onclick="window.open('home.html', '_blank')">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">AI Crop Yield Prediction</h1>
+            <p class="page-subtitle">Get accurate yield forecasts and personalized farming recommendations</p>
+            
+            <div class="prediction-container">
+                <!-- Input Form -->
+                <div class="input-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-edit"></i>
+                        Farm Details
+                    </h2>
+                    
+                    <form id="predictionForm">
+                        <div class="form-group">
+                            <label class="form-label">Location</label>
+                            <div class="location-group">
+                                <div class="location-input">
+                                    <input type="text" class="form-input" id="location" placeholder="Enter your farm location" required>
+                                </div>
+                                <button type="button" class="gps-btn" onclick="getLocation()">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Use GPS
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Crop Type</label>
+                            <select class="form-select" id="cropType" required>
+                                <option value="">Select crop type</option>
+                                <option value="rice">Rice</option>
+                                <option value="arecanut">Arecanut</option>
+                                <option value="arhar">Arhar/Tur</option>
+                                <option value="bajra">Bajra</option>
+                                <option value="banana">Banana</option>
+                                <option value="black-pepper">Black pepper</option>
+                                <option value="cashewnut">Cashewnut</option>
+                                <option value="castor-seed">Castor seed</option>
+                                <option value="coriander">Coriander</option>
+                                <option value="cotton">Cotton(lint)</option>
+                                <option value="cowpea">Cowpea(Lobia)</option>
+                                <option value="dry-chillies">Dry chillies</option>
+                                <option value="garlic">Garlic</option>
+                                <option value="ginger">Ginger</option>
+                                <option value="gram">Gram</option>
+                                <option value="groundnut">Groundnut</option>
+                                <option value="guar-seed">Guar seed</option>
+                                <option value="horse-gram">Horse-gram</option>
+                                <option value="jowar">Jowar</option>
+                                <option value="linseed">Linseed</option>
+                                <option value="maize">Maize</option>
+                                <option value="masoor">Masoor</option>
+                                <option value="mesta">Mesta</option>
+                                <option value="moong">Moong(Green Gram)</option>
+                                <option value="niger-seed">Niger seed</option>
+                                <option value="oilseeds-total">Oilseeds total</option>
+                                <option value="onion">Onion</option>
+                                <option value="other-oct-mar-pulses">Other October-March pulses</option>
+                                <option value="other-jun-oct-pulses">Other June-October pulses</option>
+                                <option value="potato">Potato</option>
+                                <option value="ragi">Ragi</option>
+                                <option value="rapeseed-mustard">Rapeseed &Mustard</option>
+                                <option value="safflower">Safflower</option>
+                                <option value="sannhamp">Sannhamp</option>
+                                <option value="sesamum">Sesamum</option>
+                                <option value="small-millets">Small millets</option>
+                                <option value="soyabean">Soyabean</option>
+                                <option value="sugarcane">Sugarcane</option>
+                                <option value="sunflower">Sunflower</option>
+                                <option value="sweet-potato">Sweet potato</option>
+                                <option value="tapioca">Tapioca</option>
+                                <option value="tobacco">Tobacco</option>
+                                <option value="urad">Urad</option>
+                                <option value="wheat">Wheat</option>
+                                <option value="other-oilseeds">other oilseeds</option>
+                                <option value="peas-beans">Peas & beans (Pulses)</option>
+                                <option value="turmeric">Turmeric</option>
+                                <option value="jute">Jute</option>
+                                <option value="barley">Barley</option>
+                                <option value="khesari">Khesari</option>
+                                <option value="coconut">Coconut</option>
+                                <option value="chickpea">ChickPea</option>
+                                <option value="moth">Moth</option>
+                                <option value="other-cereals">Other Cereals</option>
+                                <option value="kidney-beans">KidneyBeans</option>
+                                <option value="cardamom">Cardamom</option>
+                                <option value="pigeon-peas">PigeonPeas</option>
+                                <option value="moth-beans">MothBeans</option>
+                                <option value="mung-bean">MungBean</option>
+                                <option value="blackgram">Blackgram</option>
+                                <option value="lentil">Lentil</option>
+                                <option value="other-mar-jun-pulses">Other March-June Pulses</option>
+                                <option value="pomegranate">Pomegranate</option>
+                                <option value="grapes">Grapes</option>
+                                <option value="mango">Mango</option>
+                                <option value="muskmelon">Muskmelon</option>
+                                <option value="watermelon">Watermelon</option>
+                                <option value="apple">Apple</option>
+                                <option value="orange">Orange</option>
+                                <option value="papaya">Papaya</option>
+                                <option value="coffee">Coffee</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Farm Area (Hectares)</label>
+                            <input type="number" class="form-input" id="area" placeholder="Enter area in hectares" min="0.1" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Fertilizer Amount (kg/hectare)</label>
+                            <input type="number" class="form-input" id="fertilizerAmount" placeholder="Enter fertilizer amount in kg/hectare (0 if none used)" min="0" max="500" required>
+                        </div>
+
+                        <button type="submit" class="predict-btn" id="predictBtn">
+                            <i class="fas fa-chart-line"></i>
+                            Predict Yield & Get Recommendations
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="resultsSection">
+                    <h2 class="section-title">
+                        <i class="fas fa-analytics"></i>
+                        Prediction Results
+                    </h2>
+
+                    <div class="loading" id="loadingDiv">
+                        <div class="spinner"></div>
+                        <p>Analyzing your farm data and generating predictions...</p>
+                    </div>
+
+                    <div class="results-content" id="resultsContent">
+                        <div class="result-card">
+                            <div class="result-title">
+                                <i class="fas fa-seedling"></i>
+                                Predicted Yield
+                            </div>
+                            <div class="result-value" id="yieldPrediction">-</div>
+                            <div class="result-description">
+                                Based on historical data, weather patterns, and location conditions for your region.
+                                Accuracy rate: 95%
+                            </div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-title">
+                                <i class="fas fa-flask"></i>
+                                Recommended Fertilizer Amount
+                            </div>
+                            <div class="fertilizer-amount" id="fertilizerRecommendation">-</div>
+                            <div class="result-description">
+                                Optimal fertilizer quantity for maximum yield based on your crop type and current usage.
+                            </div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Key Insights
+                            </div>
+                            <div class="insight-item">
+                                <div class="insight-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="insight-label">Best Harvest Period</div>
+                                <div class="insight-value" id="harvestTime">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Form submission handler
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generatePrediction();
+        });
+        // GPS location function
+function getLocation() {
+    const locationInput = document.getElementById('location');
+    const gpsBtn = document.querySelector('.gps-btn');
+
+    if (navigator.geolocation) {
+        gpsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+        gpsBtn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const lat = position.coords.latitude.toFixed(4);
+            const lon = position.coords.longitude.toFixed(4);
+
+            // Send coordinates to backend for reverse geocoding
+            fetch("http://127.0.0.1:8000/get-state", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    lat: parseFloat(lat),
+                    lon: parseFloat(lon)
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Backend Response:", data);
+
+                // Update input with state + coordinates
+                locationInput.value = `${data.state}`;
+
+                gpsBtn.innerHTML = '<i class="fas fa-check"></i> Located!';
+                setTimeout(() => {
+                    gpsBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use GPS';
+                    gpsBtn.disabled = false;
+                }, 2000);
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                gpsBtn.innerHTML = '<i class="fas fa-exclamation"></i> Failed';
+                setTimeout(() => {
+                    gpsBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use GPS';
+                    gpsBtn.disabled = false;
+                }, 2000);
+            });
+
+        }, function (error) {
+            console.error("Geolocation Error:", error);
+            gpsBtn.innerHTML = '<i class="fas fa-exclamation"></i> Failed';
+            setTimeout(() => {
+                gpsBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use GPS';
+                gpsBtn.disabled = false;
+            }, 2000);
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+        // Generate prediction function
+       function generatePrediction() {
+            const formData = {
+                crop: document.getElementById('cropType').value,
+                state: document.getElementById('location').value, // state name from input / GPS
+                area: parseFloat(document.getElementById('area').value),
+                fertilizer_used: parseFloat(document.getElementById('fertilizerAmount').value) || 0
+            };
+
+            // Show loading
+            document.getElementById('resultsSection').classList.add('active');
+            document.getElementById('loadingDiv').classList.add('show');
+            document.getElementById('resultsContent').classList.remove('show');
+            
+            document.getElementById('predictBtn').disabled = true;
+
+            // Call FastAPI backend
+           fetch("http://127.0.0.1:8000/predict-yield", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.detail || "Prediction failed");
+                }
+                return data;
+            })
+            .then(data => {
+                showResults(data);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Backend error: " + error.message);
+                document.getElementById('loadingDiv').classList.remove('show');
+                document.getElementById('predictBtn').disabled = false;
+            });
+
+
+        }
+
+        function showResults(data) {
+            document.getElementById('loadingDiv').classList.remove('show');
+            document.getElementById('resultsContent').classList.add('show');
+
+            document.getElementById('yieldPrediction').textContent =
+                data.yield_metric_tons + " metric tons";
+
+            document.getElementById('fertilizerRecommendation').textContent =
+                data.extra_needed_fertilizer_kg_per_ha + " kg/ha extra needed";
+
+            document.getElementById('harvestTime').textContent = data.best_time;
+
+            document.getElementById('predictBtn').disabled = false;
+        }
+
+        // Back button function
+        function goBack() {
+            if (confirm('Are you sure you want to go back? Your input data will be lost.')) {
+                window.history.back();
+            }
+        }
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();   // ✅ prevents default GET submit
+            generatePrediction();
+        });
+
+        // Form validation
+        document.getElementById('predictionForm').addEventListener('input', function(e) {
+            const form = e.target.form;
+            const predictBtn = document.getElementById('predictBtn');
+            
+            // Check if all required fields are filled
+            const requiredFields = form.querySelectorAll('[required]');
+            let allFilled = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    allFilled = false;
+                }
+            });
+            
+            predictBtn.disabled = !allFilled;
+        });
+
+        // Area validation
+        document.getElementById('area').addEventListener('input', function(e) {
+            const value = parseFloat(e.target.value);
+            if (value > 10000) e.target.value = 10000; // Max 10,000 hectares
+            if (value < 0) e.target.value = 0;
+        });
+
+        // Fertilizer amount validation
+        document.getElementById('fertilizerAmount').addEventListener('input', function(e) {
+            const value = parseFloat(e.target.value);
+            if (value > 500) e.target.value = 500; // Max 500 kg/hectare
+            if (value < 0) e.target.value = 0;
+        });
+    </script>
+</body>
+</html>

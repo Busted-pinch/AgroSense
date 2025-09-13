@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Irrigation - AGROSENSE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f9a2c 0%, #68b346 50%, #7bc95a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #4f9a2c;
+        }
+
+        .back-home-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .back-home-btn:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 154, 44, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            margin: 20px 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+            align-items: start;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #4f9a2c;
+        }
+
+        .input-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-header h2 {
+            color: #2c5f2d;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .input-header p {
+            color: #6b8e6b;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c5f2d;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #d4edda;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #4f9a2c;
+            box-shadow: 0 0 0 3px rgba(79, 154, 44, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.4);
+        }
+
+        .calculate-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4f9a2c;
+            opacity: 0.5;
+            transition: all 0.5s ease;
+        }
+
+        .results-section.active {
+            opacity: 1;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .results-header h2 {
+            color: #2c5f2d;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .results-header p {
+            color: #6b8e6b;
+            font-size: 1rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e8f5e8;
+            border-top: 4px solid #4f9a2c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading h3 {
+            color: #2c5f2d;
+            margin-bottom: 10px;
+        }
+
+        .loading p {
+            color: #6b8e6b;
+        }
+
+        /* Water Requirement Display */
+        .water-display {
+            background: linear-gradient(135deg, #f0fff0 0%, #e8f5e8 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 3px solid #4f9a2c;
+            display: none;
+        }
+
+        .water-display.show {
+            display: block;
+        }
+
+        .water-icon {
+            font-size: 4rem;
+            color: #4f9a2c;
+            margin-bottom: 20px;
+        }
+
+        .water-amount {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #2c5f2d;
+            margin-bottom: 10px;
+        }
+
+        .water-unit {
+            font-size: 1.2rem;
+            color: #6b8e6b;
+            margin-bottom: 20px;
+        }
+
+        .water-description {
+            color: #2c5f2d;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .water-amount {
+                font-size: 2.5rem;
+            }
+
+            .input-section, .results-section {
+                padding: 25px;
+            }
+        }
+        .no-style {
+    text-decoration: none;  /* removes underline */
+    color: inherit;         /* makes link use normal text color */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <a href="home.html" class="no-style">
+                    <i class="fas fa-seedling"></i>
+                    <span>AGROSENSE</span> </a> 
+                </div>
+                <a href="home.html" class="back-home-btn" onclick="goHome()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1><i class="fas fa-tint"></i> Smart Irrigation Calculator</h1>
+            <p>Calculate optimal water requirements for your crops based on location and crop type</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <div class="input-header">
+                        <h2><i class="fas fa-calculator"></i> Water Requirement Calculator</h2>
+                        <p>Enter your farm details to get precise irrigation recommendations</p>
+                    </div>
+                    
+                    <form id="irrigationForm" onsubmit="calculateWaterRequirement(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="location">Location *</label>
+                            <input type="text" id="location" class="form-input" placeholder="Enter your farm location (e.g., Pune, Maharashtra)" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="cropType">Crop Type *</label>
+                            <select id="cropType" class="form-select" required>
+                                <option value="">Select crop type</option>
+                                <option value="rice">Rice</option>
+                                <option value="wheat">Wheat</option>
+                                <option value="maize">Maize (Corn)</option>
+                                <option value="cotton">Cotton</option>
+                                <option value="sugarcane">Sugarcane</option>
+                                <option value="soybean">Soybean</option>
+                                <option value="barley">Barley</option>
+                                <option value="mustard">Mustard</option>
+                                <option value="tomato">Tomato</option>
+                                <option value="potato">Potato</option>
+                                <option value="onion">Onion</option>
+                                <option value="groundnut">Groundnut</option>
+                                <option value="sunflower">Sunflower</option>
+                                <option value="chilli">Chilli</option>
+                                <option value="brinjal">Brinjal</option>
+                                <option value="cabbage">Cabbage</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="calculate-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> Calculate Water Requirement
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="resultsSection">
+                    <div class="results-header">
+                        <h2><i class="fas fa-chart-bar"></i> Water Requirement Analysis</h2>
+                        <p>Optimal irrigation recommendations per harvest season</p>
+                    </div>
+
+                    <!-- Loading -->
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <h3>Calculating Water Requirements...</h3>
+                        <p>Analyzing crop needs and climate data for your location</p>
+                    </div>
+
+                    <!-- Water Requirement Display -->
+                    <div class="water-display" id="waterDisplay">
+                        <div class="water-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="water-amount" id="waterAmount">0</div>
+                        <div class="water-unit">mm per harvest/season</div>
+                        <div class="water-description" id="waterDescription">
+                            Recommended water requirement for complete harvest season
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Water requirement data for different crops (mm per harvest season)
+        const cropWaterRequirements = {
+            rice: { harvestDuration: 120, dailyAvg: 10, seasonTotal: 1200, type: 'High water crop' },
+            wheat: { harvestDuration: 120, dailyAvg: 4, seasonTotal: 480, type: 'Moderate water crop' },
+            maize: { harvestDuration: 90, dailyAvg: 5.5, seasonTotal: 495, type: 'Moderate water crop' },
+            cotton: { harvestDuration: 180, dailyAvg: 5, seasonTotal: 900, type: 'Moderate water crop' },
+            sugarcane: { harvestDuration: 365, dailyAvg: 12.5, seasonTotal: 4560, type: 'Very high water crop' },
+            soybean: { harvestDuration: 100, dailyAvg: 4, seasonTotal: 400, type: 'Moderate water crop' },
+            barley: { harvestDuration: 120, dailyAvg: 3.2, seasonTotal: 384, type: 'Low water crop' },
+            mustard: { harvestDuration: 120, dailyAvg: 2.7, seasonTotal: 324, type: 'Low water crop' },
+            tomato: { harvestDuration: 120, dailyAvg: 6.5, seasonTotal: 780, type: 'High water crop' },
+            potato: { harvestDuration: 90, dailyAvg: 5, seasonTotal: 450, type: 'Moderate water crop' },
+            onion: { harvestDuration: 150, dailyAvg: 4, seasonTotal: 600, type: 'Moderate water crop' },
+            groundnut: { harvestDuration: 120, dailyAvg: 3.7, seasonTotal: 444, type: 'Low-moderate water crop' },
+            sunflower: { harvestDuration: 90, dailyAvg: 5, seasonTotal: 450, type: 'Moderate water crop' },
+            chilli: { harvestDuration: 150, dailyAvg: 4, seasonTotal: 600, type: 'Moderate water crop' },
+            brinjal: { harvestDuration: 120, dailyAvg: 5.5, seasonTotal: 660, type: 'Moderate water crop' },
+            cabbage: { harvestDuration: 90, dailyAvg: 4, seasonTotal: 360, type: 'Moderate water crop' }
+        };
+
+        function goHome() {
+            console.log('Navigating to home...');
+        }
+
+        function calculateWaterRequirement(event) {
+            event.preventDefault();
+            
+            const location = document.getElementById('location').value;
+            const cropType = document.getElementById('cropType').value;
+            
+            if (!location || !cropType) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('resultsSection').classList.add('active');
+            document.getElementById('loading').classList.add('active');
+            hideResults();
+            
+            // Disable form
+            document.getElementById('calculateBtn').disabled = true;
+            
+            // Simulate calculation time
+            setTimeout(() => {
+                showResults(location, cropType);
+            }, 2500);
+        }
+
+        function hideResults() {
+            document.getElementById('waterDisplay').classList.remove('show');
+        }
+
+        function showResults(location, cropType) {
+            // Hide loading
+            document.getElementById('loading').classList.remove('active');
+            
+            // Get crop data
+            const cropData = cropWaterRequirements[cropType];
+            
+            // Calculate seasonal water requirement (add some variation based on location)
+            let seasonalRequirement = cropData.seasonTotal;
+            
+            // Adjust based on location (simplified logic)
+            if (location.toLowerCase().includes('rajasthan') || location.toLowerCase().includes('gujarat')) {
+                seasonalRequirement *= 1.2; // Higher in dry regions
+            } else if (location.toLowerCase().includes('kerala') || location.toLowerCase().includes('assam')) {
+                seasonalRequirement *= 0.8; // Lower in wet regions
+            }
+            
+            // Round to nearest whole number
+            seasonalRequirement = Math.round(seasonalRequirement);
+            
+            // Update display
+            document.getElementById('waterAmount').textContent = seasonalRequirement;
+            document.getElementById('waterDescription').textContent = 
+                `Total water requirement for complete ${cropType} harvest season in ${location} (${cropData.harvestDuration} days)`;
+            
+            // Show results
+            document.getElementById('waterDisplay').classList.add('show');
+            
+            // Re-enable form
+            document.getElementById('calculateBtn').disabled = false;
+        }
+
+        // Form validation
+        document.getElementById('irrigationForm').addEventListener('input', function(e) {
+            const location = document.getElementById('location').value.trim();
+            const cropType = document.getElementById('cropType').value;
+            const calculateBtn = document.getElementById('calculateBtn');
+            
+            calculateBtn.disabled = !location || !cropType;
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial button state
+            document.getElementById('calculateBtn').disabled = true;
+        });
+    </script>
+</body>
+</html>

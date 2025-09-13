@@ -1,0 +1,2 @@
+2025-09-08 16:32:32,505 - AgroSense - INFO - Market calculation successful: profit=2137.5, status=excess (supply=500.0, demand=450.0, cost=20.75, price=25.5)
+2025-09-13 17:09:39,204 - AgroSense - INFO - Market calculation successful: profit=9900.0, status=balanced (supply=10.0, demand=10.0, cost=10.0, price=1000.0)

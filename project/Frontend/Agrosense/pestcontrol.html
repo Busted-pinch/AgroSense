@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pest Control - AGROSENSE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f9a2c 0%, #68b346 50%, #7bc95a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #4f9a2c;
+        }
+
+        /* Back to Home Button */
+        .back-home-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .back-home-btn:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 154, 44, 0.3);
+        }
+
+        .back-home-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .back-home-btn:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            margin-top: 40px;
+            border-radius: 20px 20px 0 0;
+            min-height: 80vh;
+            padding: 50px 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px dashed #4f9a2c;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section.dragover {
+            border-color: #68b346;
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4edda 100%);
+            transform: scale(1.02);
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .upload-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .upload-header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .upload-area {
+            text-align: center;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(79, 154, 44, 0.05);
+            border-radius: 15px;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #4f9a2c;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .upload-subtext {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .upload-btn:hover {
+            background: linear-gradient(45deg, #68b346, #7bc95a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 154, 44, 0.4);
+        }
+
+        /* Preview Area */
+        .image-preview {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(45deg, #e74c3c, #ec7063);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .analyze-btn:hover {
+            background: linear-gradient(45deg, #ec7063, #f1948a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4f9a2c;
+        }
+
+        .results-header {
+            margin-bottom: 30px;
+        }
+
+        .results-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .loading-animation {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4f9a2c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Pest Identification Results */
+        .pest-result {
+            display: none;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .pest-info {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .pest-name {
+            font-size: 1.5rem;
+            color: #c0392b;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .confidence-score {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .pest-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .threat-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .threat-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .threat-high {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .threat-medium {
+            background: #f39c12;
+            color: white;
+        }
+
+        .threat-low {
+            background: #27ae60;
+            color: white;
+        }
+
+        /* Treatment Recommendations */
+        .treatment-section {
+            margin-top: 30px;
+        }
+
+        .treatment-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border: 2px solid #4f9a2c;
+            background: white;
+            color: #4f9a2c;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            background: #4f9a2c;
+            color: white;
+        }
+
+        .treatment-content {
+            display: none;
+        }
+
+        .treatment-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .treatment-card {
+            background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #27ae60;
+            transition: transform 0.3s ease;
+        }
+
+        .treatment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .treatment-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .treatment-details {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .dosage-info {
+            background: rgba(79, 154, 44, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .dosage-title {
+            font-weight: bold;
+            color: #4f9a2c;
+            margin-bottom: 8px;
+        }
+
+        .cost-estimate {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .cost-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .cost-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        /* Weather Integration */
+        .weather-alert {
+            background: linear-gradient(45deg, #f39c12, #f7dc6f);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .weather-icon {
+            font-size: 2rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(79, 154, 44, 0.1);
+            cursor: default;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+            background: linear-gradient(45deg, #4f9a2c, #68b346);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .treatment-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .no-style {
+    text-decoration: none;  /* removes underline */
+    color: inherit;         /* makes link use normal text color */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <a href="home.html" class="no-style">
+                    <i class="fas fa-seedling"></i>
+                    <span>AGROSENSE</span> </a>
+                </div>
+                <a href="home.html" class="back-home-btn" onclick="goHome()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1><i class="fas fa-bug"></i> Smart Pest Control System</h1>
+            <p>Upload photos of your crops to get instant pest identification and personalized treatment recommendations using advanced AI technology</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- Upload Section -->
+                <div class="upload-section" id="uploadSection">
+                    <div class="upload-header">
+                        <h2><i class="fas fa-camera"></i> Upload Crop Image</h2>
+                        <p>Take a clear photo of the affected crop area for accurate pest identification</p>
+                    </div>
+                    
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">Click to upload or drag and drop</div>
+                        <div class="upload-subtext">Supports JPG, PNG, WEBP (Max 10MB)</div>
+                        <button class="upload-btn" type="button">
+                            <i class="fas fa-folder-open"></i> Choose File
+                        </button>
+                    </div>
+                    
+                    <input type="file" id="fileInput" class="file-input" accept="image/*" onchange="handleFileUpload(event)">
+                    
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImage" class="preview-image" alt="Uploaded crop image">
+                        <div>
+                            <button class="analyze-btn" onclick="analyzePest()">
+                                <i class="fas fa-search"></i> Analyze for Pests
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section">
+                    <div class="results-header">
+                        <h2><i class="fas fa-flask"></i> Analysis Results</h2>
+                        <p>AI-powered pest identification and treatment recommendations</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState">
+                        <i class="fas fa-microscope"></i>
+                        <h3>Upload an image to start analysis</h3>
+                        <p>Our AI will identify pests and recommend the best treatment options</p>
+                    </div>
+
+                    <!-- Loading Animation -->
+                    <div class="loading-animation" id="loadingAnimation">
+                        <div class="spinner"></div>
+                        <div class="loading-text">Analyzing image for pest identification...</div>
+                    </div>
+
+                    <!-- Pest Results -->
+                    <div class="pest-result" id="pestResult">
+                        <div class="weather-alert" id="weatherAlert">
+                            <i class="fas fa-cloud-sun weather-icon"></i>
+                            <div>
+                                <strong>Weather Advisory:</strong> Current conditions favor increased pest activity. Consider immediate treatment.
+                            </div>
+                        </div>
+
+                        <div class="pest-info">
+                            <div class="pest-name" id="pestName">Aphids (Green Peach Aphid)</div>
+                            <div class="confidence-score" id="confidenceScore">95% Confidence</div>
+                            <div class="pest-description" id="pestDescription">
+                                Small, soft-bodied insects that feed on plant sap. They can cause yellowing, stunted growth, and transmit viral diseases.
+                            </div>
+                            <div class="threat-level">
+                                <span>Threat Level:</span>
+                                <span class="threat-badge threat-high" id="threatLevel">High</span>
+                            </div>
+                        </div>
+
+                        <!-- Treatment Recommendations -->
+                        <div class="treatment-section">
+                            <h3>Treatment Recommendations</h3>
+                            
+                            <div class="treatment-tabs">
+                                <button class="tab-btn active" onclick="showTreatmentTab('organic')">Organic Solutions</button>
+                                <button class="tab-btn" onclick="showTreatmentTab('chemical')">Chemical Treatment</button>
+                                <button class="tab-btn" onclick="showTreatmentTab('biological')">Biological Control</button>
+                            </div>
+
+                            <!-- Organic Treatment -->
+                            <div class="treatment-content active" id="organic">
+                                <div class="treatment-card">
+                                    <div class="treatment-title">
+                                        <i class="fas fa-leaf" style="color: #27ae60;"></i>
+                                        Neem Oil Spray
+                                    </div>
+                                    <div class="treatment-details">
+                                        Natural pesticide that disrupts pest feeding and reproduction without harming beneficial insects.
+                                    </div>
+                                    <div class="dosage-info">
+                                        <div class="dosage-title">Application:</div>
+                                        <div>Mix 2-3 tablespoons per liter of water. Spray during early morning or evening.</div>
+                                    </div>
+                                    <div class="cost-estimate">
+                                        <span class="cost-label">Estimated Cost per acre:</span>
+                                        <span class="cost-value">₹300-500</span>
+                                    </div>
+                                </div>
+
+                                <div class="treatment-card">
+                                    <div class="treatment-title">
+                                        <i class="fas fa-spray-can" style="color: #27ae60;"></i>
+                                        Soap Water Solution
+                                    </div>
+                                    <div class="treatment-details">
+                                        Mild insecticidal soap that suffocates soft-bodied insects while being safe for plants.
+                                    </div>
+                                    <div class="dosage-info">
+                                        <div class="dosage-title">Application:</div>
+                                        <div>1-2 tablespoons liquid soap per liter water. Apply 2-3 times weekly.</div>
+                                    </div>
+                                    <div class="cost-estimate">
+                                        <span class="cost-label">Estimated Cost per acre:</span>
+                                        <span class="cost-value">₹150-250</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chemical Treatment -->
+                            <div class="treatment-content" id="chemical">
+                                <div class="treatment-card">
+                                    <div class="treatment-title">
+                                        <i class="fas fa-vial" style="color: #e74c3c;"></i>
+                                        Imidacloprid 17.8% SL
+                                    </div>
+                                    <div class="treatment-details">
+                                        Systemic insecticide effective against sucking pests. Provides long-lasting protection.
+                                    </div>
+                                    <div class="dosage-info">
+                                        <div class="dosage-title">Application:</div>
+                                        <div>0.5-1 ml per liter water. Single application provides 3-4 weeks protection.</div>
+                                    </div>
+                                    <div class="cost-estimate">
+                                        <span class="cost-label">Estimated Cost per acre:</span>
+                                        <span class="cost-value">₹800-1200</span>
+                                    </div>
+                                </div>
+
+                                <div class="treatment-card">
+                                    <div class="treatment-title">
+                                        <i class="fas fa-tint" style="color: #e74c3c;"></i>
+                                        Thiamethoxam 25% WG
+                                    </div>
+                                    <div class="treatment-details">
+                                        Fast-acting insecticide with both contact and systemic action against aphids.
+                                    </div>
+                                    <div class="dosage-info">
+                                        <div class="dosage-title">Application:</div>
+                                        <div>0.2-0.3g per liter water. Apply when pest population crosses threshold.</div>
+                                    </div>
+                                    <div class="cost-estimate">
+                                        <span class="cost-label">Estimated Cost per acre:</span>
+                                        <span class="cost-value">₹600-900</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Biological Control -->
+                            <div class="treatment-content" id="biological">
+                                <div class="treatment-card">
+                                    <div class="treatment-title">
+                                        <i class="fas fa-bug" style="color: #f39c12;"></i>
+                                        Ladybird Beetles Release
+                                    </div>
+                                    <div class="treatment-details">
+                                        Natural predators that consume large quantities of aphids. Environmentally friendly solution.
+                                    </div>
+                                    <div class="dosage-info">
+                                        <div class="dosage-title">Application:</div>
+                                        <div>Release 5-10 beetles per plant. Best during early morning hours.</div>
+                                    </div>
+                                    <div class="cost-estimate">
+                                        <span class="cost-label">Estimated Cost per acre:</span>
+                                        <span class="cost-value">₹1000-1500</span>
+                                    </div>
+                                </div>
+
+                                <div class="treatment-card">
+                                    <div class="treatment-title">
+                                        <i class="fas fa-microscope" style="color: #f39c12;"></i>
+                                        Beauveria bassiana
+                                    </div>
+                                    <div class="treatment-details">
+                                        Entomopathogenic fungus that naturally infects and kills aphids without chemical residues.
+                                    </div>
+                                    <div class="dosage-info">
+                                        <div class="dosage-title">Application:</div>
+                                        <div>2-3g per liter water. Apply during humid conditions for best results.</div>
+                                    </div>
+                                    <div class="cost-estimate">
+                                        <span class="cost-label">Estimated Cost per acre:</span>
+                                        <span class="cost-value">₹400-700</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Early Detection</h3>
+                    <p>AI-powered image recognition identifies pests in early stages before major crop damage occurs</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h3>Weather Integration</h3>
+                    <p>Real-time weather data helps predict pest activity patterns and optimal treatment timing</p>
+                </div>
+
+
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>IPM Strategies</h3>
+                    <p>Integrated Pest Management approaches combining organic, chemical, and biological solutions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let uploadedImage = null;
+
+        // Go home function
+        function goHome() {
+            // Simple animation before redirect
+            const btn = document.querySelector('.back-home-btn');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btn.style.transform = 'scale(1)';
+                // You can replace this with actual navigation
+                console.log('Navigating to home...');
+                // window.location.href = '/';
+            }, 150);
+        }
+
+        // File upload handling
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size should be less than 10MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result;
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Drag and drop functionality
+        const uploadSection = document.getElementById('uploadSection');
+        
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    document.getElementById('fileInput').files = files;
+                    handleFileUpload({target: {files: files}});
+                } else {
+                    alert('Please upload an image file');
+                }
+            }
+        });
+
+        // Pest analysis function
+        function analyzePest() {
+            if (!uploadedImage) {
+                alert('Please upload an image first');
+                return;
+            }
+
+            // Hide empty state and show loading
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('loadingAnimation').style.display = 'block';
+            document.getElementById('pestResult').style.display = 'none';
+
+            // Simulate AI analysis with realistic delay
+            setTimeout(() => {
+                document.getElementById('loadingAnimation').style.display = 'none';
+                document.getElementById('pestResult').style.display = 'block';
+                
+                // Simulate different pest identifications based on random selection
+                const pests = [
+                    {
+                        name: "Aphids (Green Peach Aphid)",
+                        confidence: 95,
+                        threat: "high",
+                        description: "Small, soft-bodied insects that feed on plant sap. They can cause yellowing, stunted growth, and transmit viral diseases."
+                    },
+                    {
+                        name: "Spider Mites (Two-spotted Spider Mite)",
+                        confidence: 89,
+                        threat: "medium",
+                        description: "Tiny arachnids that cause stippling damage on leaves. Thrive in hot, dry conditions and can rapidly multiply."
+                    },
+                    {
+                        name: "Whiteflies (Greenhouse Whitefly)",
+                        confidence: 92,
+                        threat: "high",
+                        description: "Small flying insects that feed on plant juices and secrete honeydew, leading to sooty mold growth."
+                    },
+                    {
+                        name: "Thrips (Western Flower Thrips)",
+                        confidence: 87,
+                        threat: "medium",
+                        description: "Slender insects that scrape leaf surfaces and feed on plant cells, causing silver streaks on leaves."
+                    }
+                ];
+
+                const randomPest = pests[Math.floor(Math.random() * pests.length)];
+                
+                document.getElementById('pestName').textContent = randomPest.name;
+                document.getElementById('confidenceScore').textContent = randomPest.confidence + '% Confidence';
+                document.getElementById('pestDescription').textContent = randomPest.description;
+                
+                const threatBadge = document.getElementById('threatLevel');
+                threatBadge.textContent = randomPest.threat.charAt(0).toUpperCase() + randomPest.threat.slice(1);
+                threatBadge.className = 'threat-badge threat-' + randomPest.threat;
+
+                // Update weather alert based on threat level
+                const weatherAlert = document.getElementById('weatherAlert');
+                if (randomPest.threat === 'high') {
+                    weatherAlert.innerHTML = `
+                        <i class="fas fa-exclamation-triangle weather-icon"></i>
+                        <div>
+                            <strong>High Risk Alert:</strong> Current weather conditions favor rapid pest multiplication. Immediate treatment recommended.
+                        </div>
+                    `;
+                    weatherAlert.style.background = 'linear-gradient(45deg, #e74c3c, #ec7063)';
+                } else {
+                    weatherAlert.innerHTML = `
+                        <i class="fas fa-cloud-sun weather-icon"></i>
+                        <div>
+                            <strong>Weather Advisory:</strong> Monitor pest population closely. Treatment may be needed if numbers increase.
+                        </div>
+                    `;
+                    weatherAlert.style.background = 'linear-gradient(45deg, #f39c12, #f7dc6f)';
+                }
+
+                // Scroll to results
+                document.getElementById('pestResult').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 3000);
+        }
+
+        // Treatment tab switching
+        function showTreatmentTab(tabName) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.treatment-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Show corresponding content
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add ripple effect to buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.matches('.upload-btn, .analyze-btn, .tab-btn, .back-home-btn')) {
+                    const ripple = document.createElement('span');
+                    const rect = e.target.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.6);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        pointer-events: none;
+                    `;
+                    
+                    e.target.style.position = 'relative';
+                    e.target.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                }
+            });
+
+            // Feature cards hover animations
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) rotateY(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) rotateY(0)';
+                });
+            });
+
+            // Add CSS for ripple animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Additional utility functions
+        function resetAnalysis() {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('loadingAnimation').style.display = 'none';
+            document.getElementById('pestResult').style.display = 'none';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+            uploadedImage = null;
+        }
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.querySelector('.modal');
+                if (modal && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            }
+        });
+
+        // Performance optimization - lazy loading for heavy content
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.feature-card, .treatment-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

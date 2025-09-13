@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Log in - AGROSENSE</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="image-removebg-preview300.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(rgba(79, 154, 44, 0.7), rgba(120, 200, 90, 0.7)),
+        url("https://static.vecteezy.com/system/resources/previews/012/619/214/large_2x/corn-crop-background-for-the-theme-of-agriculture-and-food-industry-free-photo.jpg")
+        no-repeat center center/cover;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #2c5f2d;
+      text-decoration: none;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      color: #4f9a2c;
+    }
+
+    /* Form Section */
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .form-container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+      color: #2c5f2d;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #4f9a2c;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .form-container button {
+      background: linear-gradient(45deg, #ff6b6b, #ffa500);
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .form-container button:hover {
+      transform: scale(1.05);
+    }
+
+    .form-container a {
+      display: block;
+      margin-top: 15px;
+      text-decoration: none;
+      color: #4f9a2c;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="home.html" class="logo">
+          <i class="fas fa-seedling"></i>
+          <span>AGROSENSE</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main login Form -->
+  <main class="main-content">
+    <div class="form-container">
+      <h2>Log In to Your Account</h2>
+      <form>
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Log In</button>
+      </form>
+      <a href="signup.html">Don't have an account? Sign up</a>
+    </div>
+  </main>
+</body>
+</html>
