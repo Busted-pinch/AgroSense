@@ -1,4 +1,4 @@
-<img src="logo.png" alt="AgroSense Logo" width="100" height="100">
+<img src="Frontend/Agrosense/logo.png" alt="AgroSense Logo" width="100" height="100">
 
 # AgroSense
 
