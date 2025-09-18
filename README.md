@@ -1,5 +1,5 @@
 <p align = "center">
-  <a href="https://github.com/Anmol-Baranwal/GIFs-For-Readme"><img src="https://forthebadge.com/images/badges/made-with-markdown.svg" width="230" height="30" alt="made with markdown badge"></a> 
+  <a href="https://github.com/Anmol-Baranwal/GIFs-For-Readme"><img src="https://forthebadge.com/images/badges/made-with-markdown.svg" width="170" height="30" alt="made with markdown badge"></a> 
 <p/>
 <h1 align="center">
   <img src="project/Frontend/Agrosense/logo.png" width="60" height="60" style="vertical-align:middle;">
